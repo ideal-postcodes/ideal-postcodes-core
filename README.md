@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core.svg?branch=master)](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core)
+[![Build Status](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core.svg?branch=master)](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core) [![npm version](https://badge.fury.io/js/ideal-postcodes-core.svg)](https://badge.fury.io/js/ideal-postcodes-core) 
 
 # Ideal Postcodes - Core Frontend Library
 
@@ -26,18 +26,32 @@ Please see our [documentation](https://ideal-postcodes.co.uk/documentation/ideal
 
 ## Installation
 
-Copy the minified build from `/dist/`
-
-Install via npm with:
+You may install it via npm with,
 
 ```bash
-npm install ideal-postcodes-core
+npm install ideal-postcodes-core --save
 ```
+
+You may also use Bower with,
+
+```bash
+bower install ideal-postcodes-core --save
+```
+
+Finally you can install it manually by copying the minified build from `/dist/`
 
 ## Testing
 
+Run the test suite with,
+
 ```bash
 gulp test
+```
+
+You may test the library manually in a browser console with,
+
+```bash
+gulp webserver
 ```
 
 ## License

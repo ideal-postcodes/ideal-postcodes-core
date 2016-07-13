@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core.svg?branch=master)](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core)
+
 # Ideal Postcodes - Core Frontend Library
 
 ## Introduction

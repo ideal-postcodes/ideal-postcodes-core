@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"module": "system",
+		"target": "ES3",
+		"out": "ideal-postcodes-core.js",
+		"noEmitOnError": false
+	},
+	"files": [
+		"lib/*.ts",
+		"lib/client/*.ts",
+		"lib/error/*.ts",
+		"lib/utils/*.ts",
+		"lib/ajax/*.ts"
+	],
+	"exclude": [
+		"test",
+		"node_modules",
+		"dist"
+	]
+}

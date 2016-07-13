@@ -1,0 +1,24 @@
+{
+  "name": "ideal-postcodes-core",
+  "version": "0.0.1",
+  "authors": [
+    "support@ideal-postcodes.co.uk"
+  ],
+  "description": "UK postcode and address lookup jQuery plugin",
+  "main": "/dist/ideal-postcodes-core.min.js",
+  "keywords": [
+    "uk",
+    "address",
+    "postcode",
+    "lookup"
+  ],
+  "license": "MIT",
+  "homepage": "https://ideal-postcodes.co.uk",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

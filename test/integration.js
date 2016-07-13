@@ -2,8 +2,8 @@
 
 describe("Integration", () => {
 	describe(".ping", () => {
-		// beforeEach(installAjax);
-		// afterEach(uninstallAjax);
+		beforeEach(installAjax);
+		afterEach(uninstallAjax);
 		it ("returns ping", done => {
 			const client = new IdealPostcodes.Client({
 				api_key: "iddqd"

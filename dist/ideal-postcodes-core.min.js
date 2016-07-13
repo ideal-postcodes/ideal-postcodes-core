@@ -1,6 +1,6 @@
 /**
  * ideal-postcodes-core - Ideal Postcodes core frontend javascript library
- * @version v0.0.1
+ * @version v0.1.0
  * @link https://ideal-postcodes.co.uk/
  * @license MIT
  */

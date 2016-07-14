@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core.svg?branch=master)](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core) [![npm version](https://badge.fury.io/js/ideal-postcodes-core.svg)](https://badge.fury.io/js/ideal-postcodes-core) 
 
-# Ideal Postcodes - Core Frontend Library
+# Ideal Postcodes - Frontend Client
 
 ## Introduction
 
@@ -11,7 +11,7 @@ You may accomplish the following jobs using this library:
 - Query addresses for a postcode
 - Query for an address with an address fragment
 - Autocomplete an address
-- Lookup an address by its ID
+- Lookup an address by ID
 - Check key useability
 
 ## Build Status & Browser Compatibility Information

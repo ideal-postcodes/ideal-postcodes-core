@@ -1,6 +1,6 @@
 /**
  * ideal-postcodes-core - Ideal Postcodes core frontend javascript library
- * @version v0.1.0
+ * @version v0.1.1
  * @link https://ideal-postcodes.co.uk/
  * @license MIT
  */
@@ -193,7 +193,7 @@ var IdealPostcodes;
 var IdealPostcodes;
 (function (IdealPostcodes) {
     IdealPostcodes.API_URL = "api.ideal-postcodes.co.uk";
-    IdealPostcodes.TLS = IdealPostcodes.Transport.detectTls(window);
+    IdealPostcodes.TLS = true;
     IdealPostcodes.VERSION = "v1";
     IdealPostcodes.DEFAULT_TIMEOUT = 10000;
 })(IdealPostcodes || (IdealPostcodes = {}));

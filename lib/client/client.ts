@@ -42,6 +42,7 @@ namespace IdealPostcodes {
 		api_key?: string;
 		baseUrl?: string;
 		version?: string;
+		strictAuthorisation?: boolean;
 	}
 
 	export interface XhrCallback {
@@ -54,6 +55,7 @@ namespace IdealPostcodes {
 		protected baseUrl: string;
 		protected version: string;
 		protected cache: IdealPostcodes.Cache;
+		protected strictAuthorisation: boolean;
 		protected autocompleteCallback: XhrCallback;
 		protected debouncedAutocomplete: (options: LookupAutocompleteOptions) => void;
 
@@ -62,6 +64,7 @@ namespace IdealPostcodes {
 			this.tls = options.tls === undefined ? IdealPostcodes.TLS : options.tls;
 			this.version = options.version === undefined ? IdealPostcodes.VERSION : options.version;
 			this.baseUrl = options.baseUrl === undefined ? IdealPostcodes.API_URL : options.baseUrl;
+			this.strictAuthorisation = options.strictAuthorisation === undefined ? IdealPostcodes.STRICT_AUTHORISATION : options.strictAuthorisation;
 			this.cache = new IdealPostcodes.Cache();
 			const self = this;
 			this.autocompleteCallback = () => {};
@@ -131,6 +134,11 @@ namespace IdealPostcodes {
 			const query = options.query;
 			const cachedResponse = this.cache.getAutocompleteQuery(query);
 			if (cachedResponse) return callback(null, cachedResponse);
+
+			if (!this.strictAuthorisation) {
+				queryString["api_key"] = this.api_key;
+				delete headers["Authorization"];
+			}
 
 			IdealPostcodes.Transport.xhrRequest({
 				url: `${this.apiUrl()}/autocomplete/addresses`,

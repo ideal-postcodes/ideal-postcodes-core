@@ -1,6 +1,6 @@
 /**
  * ideal-postcodes-core - Ideal Postcodes core frontend javascript library
- * @version v0.1.1
+ * @version v0.1.2
  * @link https://ideal-postcodes.co.uk/
  * @license MIT
  */
@@ -196,6 +196,11 @@ var IdealPostcodes;
     IdealPostcodes.TLS = true;
     IdealPostcodes.VERSION = "v1";
     IdealPostcodes.DEFAULT_TIMEOUT = 10000;
+    /*
+     * Forces authorization header usage on autocomplete API which
+     * increases latency due to overhead OPTIONS request
+     */
+    IdealPostcodes.STRICT_AUTHORISATION = false;
 })(IdealPostcodes || (IdealPostcodes = {}));
 window["IdealPostcodes"] = IdealPostcodes;
 var IdealPostcodes;
@@ -367,6 +372,7 @@ var IdealPostcodes;
             this.tls = options.tls === undefined ? IdealPostcodes.TLS : options.tls;
             this.version = options.version === undefined ? IdealPostcodes.VERSION : options.version;
             this.baseUrl = options.baseUrl === undefined ? IdealPostcodes.API_URL : options.baseUrl;
+            this.strictAuthorisation = options.strictAuthorisation === undefined ? IdealPostcodes.STRICT_AUTHORISATION : options.strictAuthorisation;
             this.cache = new IdealPostcodes.Cache();
             var self = this;
             this.autocompleteCallback = function () { };
@@ -435,6 +441,10 @@ var IdealPostcodes;
             var cachedResponse = this.cache.getAutocompleteQuery(query);
             if (cachedResponse)
                 return callback(null, cachedResponse);
+            if (!this.strictAuthorisation) {
+                queryString["api_key"] = this.api_key;
+                delete headers["Authorization"];
+            }
             IdealPostcodes.Transport.xhrRequest({
                 url: this.apiUrl() + "/autocomplete/addresses",
                 headers: headers,

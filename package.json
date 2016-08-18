@@ -1,6 +1,6 @@
 {
   "name": "ideal-postcodes-core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Ideal Postcodes core frontend javascript library",
   "main": "dist/ideal-postcodes-core.min.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "gulp-concat": "~2.6.0",
     "gulp-header": "~1.8.2",
     "gulp-iife": "~0.3.0",
-    "gulp-server-livereload": "^1.8.1",
+    "gulp-server-livereload": "~1.8.1",
     "gulp-sourcemaps": "~1.6.0",
     "gulp-tsc": "~1.1.5",
     "gulp-tslint": "~5.0.0",
@@ -43,12 +43,12 @@
     "jasmine": "~2.4.1",
     "karma": "~0.13.22",
     "karma-chrome-launcher": "~1.0.1",
-    "karma-firefox-launcher": "^1.0.0",
+    "karma-firefox-launcher": "~1.0.0",
     "karma-jasmine": "~1.0.2",
-    "karma-jasmine-ajax": "^0.1.13",
+    "karma-jasmine-ajax": "~0.1.13",
     "karma-sauce-launcher": "~1.0.0",
     "lodash": "~4.13.1",
-    "run-sequence": "^1.2.1",
+    "run-sequence": "~1.2.1",
     "tslint": "~3.10.2"
   }
 }

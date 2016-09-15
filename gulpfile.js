@@ -2,10 +2,8 @@
 
 const gulp = require("gulp");
 const tsc = require("gulp-tsc");
-const iife = require("gulp-iife");
 const babel = require("gulp-babel");
 const Server = require('karma').Server;
-const concat = require('gulp-concat');
 const pkg = require("./package.json");
 const tslint = require("gulp-tslint");
 const uglify = require("gulp-uglify");
@@ -13,10 +11,6 @@ const header = require("gulp-header");
 const runSequence = require("run-sequence");
 const tsconfig = require("./tsconfig.json");
 const server = require('gulp-server-livereload');
-const iifeDefaults = {
-	args: ["window", "document"],
-	params: ["window", "document"]
-};
 
 const paths = {
 	tscripts : { 
@@ -48,7 +42,6 @@ gulp.task("compile", () => {
 	return gulp
 	.src(paths.tscripts.src)
 	.pipe(tsc(tsconfig.compilerOptions))
-	.pipe(iife(iifeDefaults))
 	.pipe(header(banner, { pkg: pkg }))
 	.pipe(gulp.dest(paths.tscripts.dest));
 });
@@ -66,7 +59,6 @@ gulp.task("compile_test_build", () => {
 	return gulp
 	.src(paths.tscripts.src)
 	.pipe(tsc(tsconfig.compilerOptions))
-	.pipe(iife(iifeDefaults))
 	.pipe(gulp.dest(paths.tscripts.testDest));
 });
 
@@ -79,7 +71,6 @@ gulp.task("minified", () => {
 		out: "ideal-postcodes-core.min.js"
 	}))
 	.pipe(uglify())
-	.pipe(iife(iifeDefaults))
 	.pipe(header(banner, { pkg: pkg }))
 	.pipe(gulp.dest(paths.tscripts.dest));
 });
@@ -102,9 +93,9 @@ gulp.task('unittests', done => {
 	}).start();
 });
 
-gulp.task('saucelabs', done => {
+gulp.task('browserstack', done => {
 	new Server({
-		configFile: `${__dirname}/test/config/karma.conf-ci.js`,
+		configFile: `${__dirname}/test/config/karma.conf-browserstack.js`,
 		singleRun: true
 	}, done).start();
 });
@@ -142,7 +133,7 @@ gulp.task("ci", done => {
 	runSequence(
 		"lint",
 		"compile_test_build",
-		"saucelabs", 
+		"browserstack", 
 		done
 	);
 });

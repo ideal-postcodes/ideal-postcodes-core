@@ -1,11 +1,13 @@
 "use strict";
 
-const XhrUtils = IdealPostcodes.XhrUtils;
-const constructHeaders = XhrUtils.constructHeaders;
-const constructAuthenticationHeader = XhrUtils.constructAuthenticationHeader;
-const constructQueryString = XhrUtils.constructQueryString;
-const constructAutocompleteQueryString = XhrUtils.constructAutocompleteQueryString;
-const constructAddressQueryString = XhrUtils.constructAddressQueryString;
+const Transport = IdealPostcodes.Transport;
+const constructHeaders = Transport.constructHeaders;
+const deconstructAuthenticationHeader = Transport.deconstructAuthenticationHeader;
+const constructAuthenticationHeader = Transport.constructAuthenticationHeader;
+const constructQueryString = Transport.constructQueryString;
+const constructAutocompleteQueryString = Transport.constructAutocompleteQueryString;
+const constructAddressQueryString = Transport.constructAddressQueryString;
+const isIE = Transport.isIE;
 
 describe("XhrUtils", () => {
 	describe(".constructHeaders", () => {
@@ -21,6 +23,19 @@ describe("XhrUtils", () => {
 		});
 	});
 
+	describe(".isIE", () => {
+		it ("returns IE version", () => {
+			expect(isIE({userAgent: `Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; 
+				Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; 
+				.NET CLR 3.0.30729; .NET4.0C; .NET4.0E)`})).toEqual(9);
+		});
+		it ("returns false if not IE", () => {
+			expect(isIE({userAgent: `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) 
+				AppleWebKit/537.36 (KHTML, like Gecko) 
+				Chrome/52.0.2743.116 Safari/537.36`})).toEqual(false);
+		});
+	})
+
 	describe(".constructAuthenticationHeader", () => {
 		it ("returns authorization header string", () => {
 			const result = constructAuthenticationHeader({
@@ -31,6 +46,25 @@ describe("XhrUtils", () => {
 		it ("returns empty string if no valid authorization credentials provided", () => {
 			const result = constructAuthenticationHeader({});
 			expect(result).toEqual("");
+		});
+	});
+
+	describe(".deconstructAuthenticationHeader", () => {
+		it ("deconstructs api_key", () => {
+			const result = deconstructAuthenticationHeader('IDEALPOSTCODES api_key="foo"');
+			expect(result["api_key"]).toEqual("foo");
+		});
+		it ("deconstructs any other authorization elements", () => {
+			const result = deconstructAuthenticationHeader('IDEALPOSTCODES licensee="bar"');
+			expect(result["licensee"]).toEqual("bar");
+		});
+		it ("returns empty object if no authorization header passed", () => {
+			const result = deconstructAuthenticationHeader();
+			expect(Object.keys(result).length).toEqual(0);
+		});
+		it ("returns empty object if invalid authorization header passed", () => {
+			const result = deconstructAuthenticationHeader("foobar");
+			expect(Object.keys(result).length).toEqual(0);
 		});
 	});
 

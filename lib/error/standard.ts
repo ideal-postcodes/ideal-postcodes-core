@@ -1,3 +1,5 @@
+/// <reference path="../index.ts" />
+
 namespace IdealPostcodes {
 	export namespace Errors {
 		export interface ErrorOptions {

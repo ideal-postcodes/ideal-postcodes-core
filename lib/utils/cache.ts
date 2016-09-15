@@ -1,12 +1,6 @@
-namespace IdealPostcodes {
-	export interface ResponseStore {
-		postcodeStore: Object;
-		addressStore: Object;
-		autocompleteStore: Object;
-		udprnStore: Object;
-		umprnStore: Object;
-	}
+/// <reference path="../index.ts" />
 
+namespace IdealPostcodes {
 	export class Cache {
 		protected store: ResponseStore;
 

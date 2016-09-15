@@ -10,7 +10,7 @@
 		"lib/client/*.ts",
 		"lib/error/*.ts",
 		"lib/utils/*.ts",
-		"lib/ajax/*.ts"
+		"lib/transport/*.ts"
 	],
 	"exclude": [
 		"test",

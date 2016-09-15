@@ -1,53 +1,16 @@
 /// <reference path="../index.ts" />
-/// <reference path="../ajax/xhr.ts" />
 /// <reference path="../utils/utils.ts" />
 /// <reference path="../utils/cache.ts" />
-/// <reference path="../utils/debounce.ts" />
-/// <reference path="../ajax/utils.ts" />
+/// <reference path="../transport/index.ts" />
+/// <reference path="../transport/utils.ts" />
 
 namespace IdealPostcodes {
-	export interface BasicOptions {
-		api_key?: string;
-		licensee?: string;
-		filter?: [string];
-		tags?: [string];
-	}
-
-	export interface LookupPostcodeOptions extends BasicOptions {
-		postcode: string;
-	}
-
-	export interface LookupAddressOptions extends BasicOptions {
-		query: string;
-		page?: number;
-		limit?: number;
-	}
-
-	export interface LookupIdOptions extends BasicOptions {
-		id: number;
-	}
-
-	export interface LookupAutocompleteOptions extends BasicOptions {
-		query: string;
-	}
-
 	const extend = IdealPostcodes.Utils.extend;
-	const constructHeaders = IdealPostcodes.XhrUtils.constructHeaders;
-	const constructQuery = IdealPostcodes.XhrUtils.constructQueryString;
-	const constructAddressQuery = IdealPostcodes.XhrUtils.constructAddressQueryString;
-	const constructAutocompleteQuery = IdealPostcodes.XhrUtils.constructAutocompleteQueryString;
-
-	export interface ClientOptions {
-		tls?: boolean;
-		api_key?: string;
-		baseUrl?: string;
-		version?: string;
-		strictAuthorisation?: boolean;
-	}
-
-	export interface XhrCallback {
-		(error: any, data: any, xhr?: XMLHttpRequest): void;
-	}
+	const XhrUtils = IdealPostcodes.Transport;
+	const constructHeaders = XhrUtils.constructHeaders;
+	const constructQuery = XhrUtils.constructQueryString;
+	const constructAddressQuery = XhrUtils.constructAddressQueryString;
+	const constructAutocompleteQuery = XhrUtils.constructAutocompleteQueryString;
 
 	export class Client {
 		protected tls: boolean;
@@ -78,7 +41,7 @@ namespace IdealPostcodes {
 		}
 
 		ping(callback: XhrCallback): void {
-			IdealPostcodes.Transport.xhrRequest({
+			IdealPostcodes.Transport.request({
 				url: `http${this.tls ? "s" : ""}://${this.baseUrl}`
 			}, callback);
 		}
@@ -92,7 +55,7 @@ namespace IdealPostcodes {
 			const cachedResponse = this.cache.getPostcodeQuery(query);
 			if (cachedResponse) return callback(null, cachedResponse);
 
-			IdealPostcodes.Transport.xhrRequest({
+			IdealPostcodes.Transport.request({
 				url: `${this.apiUrl()}/postcodes/${encodeURIComponent(options.postcode)}`,
 				headers: headers,
 				queryString: queryString
@@ -114,7 +77,7 @@ namespace IdealPostcodes {
 			const cachedResponse = this.cache.getAddressQuery(query);
 			if (cachedResponse) return callback(null, cachedResponse);
 
-			IdealPostcodes.Transport.xhrRequest({
+			IdealPostcodes.Transport.request({
 				url: `${this.apiUrl()}/addresses`,
 				headers: headers,
 				queryString: queryString
@@ -140,7 +103,7 @@ namespace IdealPostcodes {
 				delete headers["Authorization"];
 			}
 
-			IdealPostcodes.Transport.xhrRequest({
+			IdealPostcodes.Transport.request({
 				url: `${this.apiUrl()}/autocomplete/addresses`,
 				headers: headers,
 				queryString: queryString
@@ -160,7 +123,7 @@ namespace IdealPostcodes {
 			const cachedResponse = this.cache.getUdprnQuery(id);
 			if (cachedResponse) return callback(null, cachedResponse);
 
-			IdealPostcodes.Transport.xhrRequest({
+			IdealPostcodes.Transport.request({
 				url: `${this.apiUrl()}/udprn/${id}`,
 				headers: headers,
 				queryString: queryString
@@ -180,7 +143,7 @@ namespace IdealPostcodes {
 			const cachedResponse = this.cache.getUmprnQuery(id);
 			if (cachedResponse) return callback(null, cachedResponse);
 
-			IdealPostcodes.Transport.xhrRequest({
+			IdealPostcodes.Transport.request({
 				url: `${this.apiUrl()}/umprn/${id}`,
 				headers: headers,
 				queryString: queryString
@@ -192,7 +155,7 @@ namespace IdealPostcodes {
 		}
 
 		checkKeyUsability(callback: XhrCallback): void {
-			IdealPostcodes.Transport.xhrRequest({
+			IdealPostcodes.Transport.request({
 				url: `${this.apiUrl()}/keys/${this.api_key}`
 			}, (error, data, xhr) => {
 				if (error) return callback(error, null, xhr);
@@ -209,4 +172,3 @@ namespace IdealPostcodes {
 		}
 	}
 }
-

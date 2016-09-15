@@ -1,3 +1,4 @@
+/// <reference path="../index.ts" />
 /// <reference path="./standard.ts" />
 
 namespace IdealPostcodes {
@@ -8,7 +9,6 @@ namespace IdealPostcodes {
 		}
 
 		export const parse = (xhr: XMLHttpRequest): IdealPostcodesError | void => {
-			let response;
 			const status = xhr.status;
 			if (status === 200) return;
 
@@ -18,11 +18,13 @@ namespace IdealPostcodes {
 			}
 
 			try {
-				response = JSON.parse(xhr.responseText);
+				return parseErrorResponse(JSON.parse(xhr.responseText), status);
 			} catch (e) {
 				return new JsonParseError();
 			}
+		};
 
+		export const parseErrorResponse = (response: ApiResponse, status: number): IdealPostcodesError | void => {
 			const responseCode: number = response.code;
 			const message: string = response.message;
 

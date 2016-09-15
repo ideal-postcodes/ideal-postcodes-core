@@ -15,3 +15,8 @@
 
 ## [0.1.2] - 2016-08-18
 - Autocomplete uses querystring auth unless strictly enabled
+
+## [0.1.3] - 2016-08-18
+- Added JSONP fallback
+- Restructured library
+- Removed IIFE from compiled output

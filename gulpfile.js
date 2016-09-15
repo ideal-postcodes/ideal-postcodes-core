@@ -3,14 +3,14 @@
 const gulp = require("gulp");
 const tsc = require("gulp-tsc");
 const babel = require("gulp-babel");
-const Server = require('karma').Server;
+const Server = require("karma").Server;
 const pkg = require("./package.json");
 const tslint = require("gulp-tslint");
 const uglify = require("gulp-uglify");
 const header = require("gulp-header");
 const runSequence = require("run-sequence");
 const tsconfig = require("./tsconfig.json");
-const server = require('gulp-server-livereload');
+const server = require("gulp-server-livereload");
 
 const paths = {
 	tscripts : { 
@@ -50,7 +50,7 @@ gulp.task("compile_tests", () => {
 	return gulp
 	.src(testPaths.tscripts.src)
 	.pipe(babel({
-		presets: ['es2015']
+		presets: ["es2015"]
 	}))
 	.pipe(gulp.dest(testPaths.tscripts.dest));
 });
@@ -83,21 +83,24 @@ gulp.task("lint:default", () => {
 		}));
 });
 
-gulp.task('unittests', done => {
+gulp.task("unittests", done => {
 	new Server({
-		configFile: `${__dirname}/test/config/karma.conf.js`,
+		configFile: `${__dirname}/test/config/karma.local.conf.js`,
 		singleRun: true
 	}, code => {
-		if (code === 1) return done('Unit Test Failures');
+		if (code === 1) return done("Unit Test Failures");
 		done();
 	}).start();
 });
 
-gulp.task('browserstack', done => {
+gulp.task("browserstack", done => {
 	new Server({
-		configFile: `${__dirname}/test/config/karma.conf-browserstack.js`,
+		configFile: `${__dirname}/test/config/karma.browserstack.conf.js`,
 		singleRun: true
-	}, done).start();
+	}, code => {
+		if (code === 1) return done("CI Test Failures");
+		done();
+	}).start();
 });
 
 gulp.task("default", done => {
@@ -138,8 +141,8 @@ gulp.task("ci", done => {
 	);
 });
 
-gulp.task('webserver', function() {
-  gulp.src('./')
+gulp.task("webserver", function() {
+  gulp.src("./")
     .pipe(server({
       livereload: true,
       directoryListing: true,

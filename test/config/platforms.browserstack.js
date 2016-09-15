@@ -5,7 +5,7 @@ module.exports = {
 
 	// OS10.Firefox
 
-	"OSX_FireFox": {
+	"OSX_Firefox": {
 		base: "BrowserStack",
 		browser: "firefox",
 		os: "OS X",
@@ -58,7 +58,7 @@ module.exports = {
 
 	// Windows.Firefox
 
-	"Windows_FireFox": {
+	"Windows_Firefox": {
 		base: "BrowserStack",
 		browser: "firefox",
 		os: "Windows",
@@ -85,13 +85,13 @@ module.exports = {
 
 	// Windows.IE
 
-	"InternetExplorer_9": {
-		base: "BrowserStack",
-		browser: "IE",
-		browser_version: "9.0",
-		os: "Windows",
-		os_version: "7"
-	},
+	// "InternetExplorer_9": {
+	// 	base: "BrowserStack",
+	// 	browser: "IE",
+	// 	browser_version: "9.0",
+	// 	os: "Windows",
+	// 	os_version: "7"
+	// },
 	"InternetExplorer_10": {
 		base: "BrowserStack",
 		browser: "IE",
@@ -119,20 +119,11 @@ module.exports = {
 
 	// Android
 
-	nexus_5: {
-		base: "BrowserStack",
-		browserName: "android",
-		platform: "ANDROID",
-		os: "ios",
-		os_version: "5",
-		device: "Google Nexus 5"
-	},
-
 	nexus_4: {
 		base: "BrowserStack",
 		browserName: "android",
 		platform: "ANDROID",
-		os: "ios",
+		os: "android",
 		os_version: "4.2",
 		device: "Google Nexus 4"
 	},
@@ -141,8 +132,8 @@ module.exports = {
 		base: "BrowserStack",
 		browserName: "android",
 		platform: "ANDROID",
-		os: "ios",
-		os_version: "4",
+		os: "android",
+		os_version: "4.0",
 		device: "Google Nexus"
 	},
 
@@ -155,24 +146,6 @@ module.exports = {
 		os: "ios",
 		os_version: "5.1",
 		device: "iPhone 4S"
-	},
-
-	iphone_5: {
-		base: "BrowserStack",
-		browserName: "iPhone",
-		platform: "MAC",
-		os: "ios",
-		os_version: "6",
-		device: "iPhone 5"
-	},
-
-	iphone_5s: {
-		base: "BrowserStack",
-		browserName: "iPhone",
-		platform: "MAC",
-		os: "ios",
-		os_version: "7",
-		device: "iPhone 5S"
 	},
 
 	iphone_6: {

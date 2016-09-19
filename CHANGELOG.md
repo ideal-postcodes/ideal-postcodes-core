@@ -20,3 +20,6 @@
 - Added JSONP fallback
 - Restructured library
 - Removed IIFE from compiled output
+
+## [0.2.0] - 2016-08-19
+- checkKeyUsability now accepts options as first argument

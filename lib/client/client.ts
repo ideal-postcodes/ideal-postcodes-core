@@ -154,9 +154,10 @@ namespace IdealPostcodes {
 			});
 		}
 
-		checkKeyUsability(callback: XhrCallback): void {
+		checkKeyUsability(options: BasicOptions, callback: XhrCallback): void {
 			IdealPostcodes.Transport.request({
-				url: `${this.apiUrl()}/keys/${this.api_key}`
+				url: `${this.apiUrl()}/keys/${this.api_key}`,
+				queryString: constructQuery(options)
 			}, (error, data, xhr) => {
 				if (error) return callback(error, null, xhr);
 				return callback(null, data.result, xhr);

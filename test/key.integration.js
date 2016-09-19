@@ -6,7 +6,7 @@ describe("Key Resource", () => {
 		afterEach(uninstallAjax);
 		it ("returns true for usable api key", done => {
 			const client = new IdealPostcodes.Client({ api_key: "iddqd" });
-			client.checkKeyUsability((error, response, xhr) => {
+			client.checkKeyUsability({}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.available).toEqual(true);
 				done();
@@ -15,7 +15,7 @@ describe("Key Resource", () => {
 		});
 		it ("returns false for unusable api key", done => {
 			const client = new IdealPostcodes.Client({ api_key: "idkfa" });
-			client.checkKeyUsability((error, response, xhr) => {
+			client.checkKeyUsability({}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.available).toEqual(false);
 				done();

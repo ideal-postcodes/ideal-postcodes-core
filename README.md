@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core.svg?branch=master)](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core) [![npm version](https://badge.fury.io/js/ideal-postcodes-core.svg)](https://badge.fury.io/js/ideal-postcodes-core) 
+[![Build Status](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core.svg?branch=master)](https://travis-ci.org/ideal-postcodes/ideal-postcodes-core) [![npm version](https://badge.fury.io/js/ideal-postcodes-core.svg)](https://badge.fury.io/js/ideal-postcodes-core) ![gzip file size](http://img.badgesize.io/ideal-postcodes/ideal-postcodes-core/master/dist/ideal-postcodes-core.min.js.svg?compression=gzip) ![file size](http://img.badgesize.io/ideal-postcodes/ideal-postcodes-core/master/dist/ideal-postcodes-core.min.js.svg)
 
 # Ideal Postcodes - Frontend Client
 

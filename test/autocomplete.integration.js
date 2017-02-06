@@ -10,33 +10,48 @@ describe("Address Resource", () => {
 		});
 		afterEach(uninstallAjax);
 
-		it ("returns postcode lookup", done => {
+		it ("returns autocomplete response", done => {
+			const query = "10 downing";
 			client.lookupAutocomplete({
-				query: "10 downing"
+				query: query
 			}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.hits.length).toBeGreaterThan(0);
+				const request = parseUrl(xhr.url);
+				expect(request.path).toEqual("v1/autocomplete/addresses");
+				expect(request.query.query).toEqual(query);
+				expect(request.query.api_key).toEqual(test_api_key);
 				done();
 			});
 			expectResponse(responses.autocomplete.results);
 		});
 		it ("returns empty array results if no match", done => {
+			const query = "a";
 			client.lookupAutocomplete({
-				query: "a"
+				query: query
 			}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.hits.length).toEqual(0);
+				const request = parseUrl(xhr.url);
+				expect(request.path).toEqual("v1/autocomplete/addresses");
+				expect(request.query.query).toEqual(query);
+				expect(request.query.api_key).toEqual(test_api_key);
 				done();
 			});
 			expectResponse(responses.autocomplete.noResults);
 		});
 		it ("returns error if invalid api key", done => {
+			const query = "10 downing";
 			client = new IdealPostcodes.Client({ api_key: "bogus" });
 			client.lookupAutocomplete({
-				query: "10 downing",
+				query: query,
 			}, (error, response, xhr) => {
 				expect(error).not.toBeNull();
 				expect(error.responseCode).toEqual(4010);
+				const request = parseUrl(xhr.url);
+				expect(request.path).toEqual("v1/autocomplete/addresses");
+				expect(request.query.query).toEqual(query);
+				expect(request.query.api_key).toEqual("bogus");
 				done();
 			});
 			expectResponse(responses.invalidKey);

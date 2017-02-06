@@ -5,19 +5,25 @@ describe("Key Resource", () => {
 		beforeEach(installAjax);
 		afterEach(uninstallAjax);
 		it ("returns true for usable api key", done => {
-			const client = new IdealPostcodes.Client({ api_key: "iddqd" });
+			const api_key = "iddqd";
+			const client = new IdealPostcodes.Client({ api_key: api_key });
 			client.checkKeyUsability({}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.available).toEqual(true);
+				const request = parseUrl(xhr.url);
+				expect(request.path).toEqual("v1/keys/" + api_key);
 				done();
 			});
 			expectResponse(responses.keys.usable);
 		});
 		it ("returns false for unusable api key", done => {
-			const client = new IdealPostcodes.Client({ api_key: "idkfa" });
+			const api_key = "idkfa";
+			const client = new IdealPostcodes.Client({ api_key: api_key });
 			client.checkKeyUsability({}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.available).toEqual(false);
+				const request = parseUrl(xhr.url);
+				expect(request.path).toEqual("v1/keys/" + api_key);
 				done();
 			});
 			expectResponse(responses.keys.notUsable);

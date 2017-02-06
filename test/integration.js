@@ -11,6 +11,8 @@ describe("Integration", () => {
 			client.ping((error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.code).toEqual(2000);
+				const request = parseUrl(xhr.url);
+				expect(request.path).toBeUndefined();
 				done();
 			});
 			expectResponse(responses.ping);

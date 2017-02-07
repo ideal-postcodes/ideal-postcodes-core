@@ -44,17 +44,22 @@ namespace IdealPostcodes {
 		postcode: string;
 	}
 
-	export interface LookupAddressOptions extends BasicOptions {
+	export interface LookupAddressOptions extends BasicOptions, SearchFilters {
 		query: string;
 		page?: number;
 		limit?: number;
+	}
+
+	interface SearchFilters {
+		postcode_outward?: [string];
+		post_town?: [string];
 	}
 
 	export interface LookupIdOptions extends BasicOptions {
 		id: number;
 	}
 
-	export interface LookupAutocompleteOptions extends BasicOptions {
+	export interface LookupAutocompleteOptions extends BasicOptions, SearchFilters {
 		query: string;
 		limit?: number;
 	}

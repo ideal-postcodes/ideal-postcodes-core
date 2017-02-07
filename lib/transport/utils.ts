@@ -78,6 +78,12 @@ namespace IdealPostcodes {
 			const queryString = {};
 			queryString["query"] = options.query;
 			if (options.limit) queryString["limit"] = options.limit;
+			if (options.postcode_outward) {
+				queryString["postcode_outward"] = options.postcode_outward.join(",");
+			}
+			if (options.post_town) {
+				queryString["post_town"] = options.post_town.join(",");
+			}
 			return queryString;
 		};
 
@@ -86,6 +92,12 @@ namespace IdealPostcodes {
 			queryString["query"] = options.query;
 			queryString["page"] = options.page || 0;
 			queryString["limit"] = options.limit || 10;
+			if (options.postcode_outward) {
+				queryString["postcode_outward"] = options.postcode_outward.join(",");
+			}
+			if (options.post_town) {
+				queryString["post_town"] = options.post_town.join(",");
+			}
 			return queryString;
 		};
 	}

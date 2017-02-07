@@ -56,6 +56,7 @@ namespace IdealPostcodes {
 
 	export interface LookupAutocompleteOptions extends BasicOptions {
 		query: string;
+		limit?: number;
 	}
 
 	export interface ClientOptions {

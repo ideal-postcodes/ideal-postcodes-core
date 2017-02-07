@@ -77,6 +77,7 @@ namespace IdealPostcodes {
 		export const constructAutocompleteQueryString = (options: LookupAutocompleteOptions): { [key: string]: string } | {} => {
 			const queryString = {};
 			queryString["query"] = options.query;
+			if (options.limit) queryString["limit"] = options.limit;
 			return queryString;
 		};
 

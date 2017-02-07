@@ -56,6 +56,24 @@ describe("Address Resource", () => {
 			});
 			expectResponse(responses.invalidKey);
 		});
+		it ("limits suggestions", done => {
+			const limit = 1;
+			const query = "10 downing";
+			client.lookupAutocomplete({
+				query: query,
+				limit: limit
+			}, (error, response, xhr) => {
+				expect(error).toBeNull();
+				expect(response.hits.length).toEqual(1);
+				const request = parseUrl(xhr.url);
+				expect(request.path).toEqual("v1/autocomplete/addresses");
+				expect(request.query.query).toEqual(query);
+				expect(request.query.limit).toEqual(limit.toString());
+				expect(request.query.api_key).toEqual(test_api_key);
+				done();
+			});
+			expectResponse(responses.autocomplete.limitedResults);
+		});
 		it ("caches requests", done => {
 			client.lookupAutocomplete({
 				query: "10 downing",

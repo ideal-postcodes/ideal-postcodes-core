@@ -66,7 +66,7 @@ describe("Address Resource", () => {
 		});
 		it ("limits results", done => {
 			const query = "10 high street";
-			const limit = "1";
+			const limit = 1;
 			client.lookupAddress({
 				query: query,
 				limit: limit
@@ -78,7 +78,7 @@ describe("Address Resource", () => {
 				const request = parseUrl(xhr.url);
 				expect(request.path).toEqual("v1/addresses");
 				expect(request.query.query).toEqual(query);
-				expect(request.query.limit).toEqual(limit);
+				expect(request.query.limit).toEqual(limit.toString());
 				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
 				done();
 			});

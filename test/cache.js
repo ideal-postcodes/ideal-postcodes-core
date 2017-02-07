@@ -9,6 +9,18 @@ describe("Cache", () => {
 		cache = new Cache();
 	});
 
+	describe(".initialiseStore", () => {
+		it ("resets store", () => {
+			cache.store = "foo";
+			cache.initialiseStore();
+			expect(cache.store.postcodeStore).toBeDefined();
+			expect(cache.store.addressStore).toBeDefined();
+			expect(cache.store.autocompleteStore).toBeDefined();
+			expect(cache.store.udprnStore).toBeDefined();
+			expect(cache.store.umprnStore).toBeDefined();
+		});
+	});
+
 	describe(".cacheAddressQuery", () => {
 		it ("caches a query response", () => {
 			cache.cacheAddressQuery({query: "foo"}, { bar: "baz" });

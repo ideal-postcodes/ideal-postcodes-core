@@ -22,14 +22,8 @@ namespace IdealPostcodes {
 		protected store: ResponseStore;
 
 		constructor() {
+			this.initialiseStore();
 			this.active = true;
-			this.store = {
-				postcodeStore: {},
-				addressStore: {},
-				autocompleteStore: {},
-				udprnStore: {},
-				umprnStore: {}
-			};
 		}
 
 		disable(): void {
@@ -38,6 +32,16 @@ namespace IdealPostcodes {
 
 		enable(): void {
 			this.active = true;
+		}
+
+		initialiseStore(): void {
+			this.store = {
+				postcodeStore: {},
+				addressStore: {},
+				autocompleteStore: {},
+				udprnStore: {},
+				umprnStore: {}
+			};
 		}
 
 		cacheAddressQuery(qs: QueryStringObject, response: Object): void {

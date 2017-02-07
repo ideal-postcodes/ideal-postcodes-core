@@ -22,6 +22,7 @@ var IdealPostcodes;
      * OPTIONS request
      */
     IdealPostcodes.STRICT_AUTHORISATION = false;
+    ;
 })(IdealPostcodes || (IdealPostcodes = {}));
 window["IdealPostcodes"] = IdealPostcodes;
 var IdealPostcodes;
@@ -75,7 +76,22 @@ var IdealPostcodes;
 })(IdealPostcodes || (IdealPostcodes = {}));
 /// <reference path="../index.ts" />
 var IdealPostcodes;
+/// <reference path="../index.ts" />
 (function (IdealPostcodes) {
+    var cacheArguments = [
+        "query",
+        "limit",
+        "page",
+        "post_town",
+        "postcode_outward",
+        "filter"
+    ];
+    var generateCacheId = function (qs) {
+        return cacheArguments.map(function (arg) { return [arg, qs[arg]]; })
+            .filter(function (elem) { return elem[1] !== undefined; })
+            .map(function (elem) { return elem.join("="); })
+            .join("|");
+    };
     var Cache = (function () {
         function Cache() {
             this.store = {
@@ -86,35 +102,45 @@ var IdealPostcodes;
                 umprnStore: {}
             };
         }
-        Cache.prototype.cacheAddressQuery = function (query, response) {
-            this.store.addressStore[query] = response;
+        Cache.prototype.cacheAddressQuery = function (qs, response) {
+            var id = generateCacheId(qs);
+            this.store.addressStore[id] = response;
         };
-        Cache.prototype.getAddressQuery = function (query) {
-            return this.store.addressStore[query];
+        Cache.prototype.getAddressQuery = function (qs) {
+            var id = generateCacheId(qs);
+            return this.store.addressStore[id];
         };
-        Cache.prototype.cachePostcodeQuery = function (query, response) {
-            this.store.postcodeStore[query] = response;
+        Cache.prototype.cachePostcodeQuery = function (qs, response) {
+            var id = generateCacheId(qs);
+            this.store.postcodeStore[id] = response;
         };
-        Cache.prototype.getPostcodeQuery = function (query) {
-            return this.store.postcodeStore[query];
+        Cache.prototype.getPostcodeQuery = function (qs) {
+            var id = generateCacheId(qs);
+            return this.store.postcodeStore[id];
         };
-        Cache.prototype.cacheAutocompleteQuery = function (query, response) {
-            this.store.autocompleteStore[query] = response;
+        Cache.prototype.cacheAutocompleteQuery = function (qs, response) {
+            var id = generateCacheId(qs);
+            this.store.autocompleteStore[id] = response;
         };
-        Cache.prototype.getAutocompleteQuery = function (query) {
-            return this.store.autocompleteStore[query];
+        Cache.prototype.getAutocompleteQuery = function (qs) {
+            var id = generateCacheId(qs);
+            return this.store.autocompleteStore[id];
         };
-        Cache.prototype.cacheUdprnQuery = function (query, response) {
-            this.store.udprnStore[query] = response;
+        Cache.prototype.cacheUdprnQuery = function (qs, response) {
+            var id = generateCacheId(qs);
+            this.store.udprnStore[id] = response;
         };
-        Cache.prototype.getUdprnQuery = function (query) {
-            return this.store.udprnStore[query];
+        Cache.prototype.getUdprnQuery = function (qs) {
+            var id = generateCacheId(qs);
+            return this.store.udprnStore[id];
         };
-        Cache.prototype.cacheUmprnQuery = function (query, response) {
-            this.store.umprnStore[query] = response;
+        Cache.prototype.cacheUmprnQuery = function (qs, response) {
+            var id = generateCacheId(qs);
+            this.store.umprnStore[id] = response;
         };
-        Cache.prototype.getUmprnQuery = function (query) {
-            return this.store.umprnStore[query];
+        Cache.prototype.getUmprnQuery = function (qs) {
+            var id = generateCacheId(qs);
+            return this.store.umprnStore[id];
         };
         return Cache;
     }());
@@ -122,6 +148,7 @@ var IdealPostcodes;
 })(IdealPostcodes || (IdealPostcodes = {}));
 /// <reference path="../index.ts" />
 var IdealPostcodes;
+/// <reference path="../index.ts" />
 (function (IdealPostcodes) {
     var Transport;
     (function (Transport) {
@@ -200,6 +227,12 @@ var IdealPostcodes;
             queryString["query"] = options.query;
             if (options.limit)
                 queryString["limit"] = options.limit;
+            if (options.postcode_outward) {
+                queryString["postcode_outward"] = options.postcode_outward.join(",");
+            }
+            if (options.post_town) {
+                queryString["post_town"] = options.post_town.join(",");
+            }
             return queryString;
         };
         Transport.constructAddressQueryString = function (options) {
@@ -219,14 +252,16 @@ var IdealPostcodes;
 })(IdealPostcodes || (IdealPostcodes = {}));
 /// <reference path="../index.ts" />
 var IdealPostcodes;
+/// <reference path="../index.ts" />
 (function (IdealPostcodes) {
     var Errors;
     (function (Errors) {
         var IdealPostcodesError = (function (_super) {
             __extends(IdealPostcodesError, _super);
             function IdealPostcodesError(options) {
-                _super.call(this);
-                this.message = "Ideal Postcodes Error: " + options.message;
+                var _this = _super.call(this) || this;
+                _this.message = "Ideal Postcodes Error: " + options.message;
+                return _this;
             }
             return IdealPostcodesError;
         }(Error));
@@ -234,9 +269,9 @@ var IdealPostcodes;
         var JsonParseError = (function (_super) {
             __extends(JsonParseError, _super);
             function JsonParseError() {
-                _super.call(this, {
+                return _super.call(this, {
                     message: "Unable to parse JSON response"
-                });
+                }) || this;
             }
             ;
             return JsonParseError;
@@ -247,6 +282,8 @@ var IdealPostcodes;
 /// <reference path="../index.ts" />
 /// <reference path="./standard.ts" />
 var IdealPostcodes;
+/// <reference path="../index.ts" />
+/// <reference path="./standard.ts" />
 (function (IdealPostcodes) {
     var Errors;
     (function (Errors) {
@@ -279,11 +316,12 @@ var IdealPostcodes;
         var IdealPostcodesApiError = (function (_super) {
             __extends(IdealPostcodesApiError, _super);
             function IdealPostcodesApiError(options) {
-                _super.call(this, options);
+                var _this = _super.call(this, options) || this;
                 if (options.status)
-                    this.status = options.status;
+                    _this.status = options.status;
                 if (options.responseCode)
-                    this.responseCode = options.responseCode;
+                    _this.responseCode = options.responseCode;
+                return _this;
             }
             return IdealPostcodesApiError;
         }(Errors.IdealPostcodesError));
@@ -291,10 +329,10 @@ var IdealPostcodes;
         var RateLimitError = (function (_super) {
             __extends(RateLimitError, _super);
             function RateLimitError() {
-                _super.call(this, {
+                return _super.call(this, {
                     status: 503,
                     message: "Rate Limit Reached. Please wait a while before you retry your request"
-                });
+                }) || this;
             }
             return RateLimitError;
         }(IdealPostcodesApiError));
@@ -302,9 +340,9 @@ var IdealPostcodes;
         var RequestTimeoutError = (function (_super) {
             __extends(RequestTimeoutError, _super);
             function RequestTimeoutError() {
-                _super.call(this, {
+                return _super.call(this, {
                     message: "Request timed out"
-                });
+                }) || this;
             }
             return RequestTimeoutError;
         }(IdealPostcodesApiError));
@@ -312,9 +350,9 @@ var IdealPostcodes;
         var GenericApiError = (function (_super) {
             __extends(GenericApiError, _super);
             function GenericApiError() {
-                _super.call(this, {
+                return _super.call(this, {
                     message: "Unknown AJAX error occurred when accessing API"
-                });
+                }) || this;
             }
             return GenericApiError;
         }(IdealPostcodesApiError));
@@ -326,6 +364,10 @@ var IdealPostcodes;
 /// <reference path="../error/api.ts" />
 /// <reference path="../utils/utils.ts" />
 var IdealPostcodes;
+/// <reference path="./utils.ts" />
+/// <reference path="../index.ts" />
+/// <reference path="../error/api.ts" />
+/// <reference path="../utils/utils.ts" />
 (function (IdealPostcodes) {
     var Transport;
     (function (Transport) {
@@ -381,6 +423,10 @@ var IdealPostcodes;
 /// <reference path="../error/api.ts" />
 /// <reference path="../utils/utils.ts" />
 var IdealPostcodes;
+/// <reference path="./utils.ts" />
+/// <reference path="../index.ts" />
+/// <reference path="../error/api.ts" />
+/// <reference path="../utils/utils.ts" />
 (function (IdealPostcodes) {
     var Transport;
     (function (Transport) {
@@ -455,6 +501,10 @@ var IdealPostcodes;
 /// <reference path="./jsonp.ts" />
 /// <reference path="../index.ts" />
 var IdealPostcodes;
+/// <reference path="./utils.ts" />
+/// <reference path="./xhr.ts" />
+/// <reference path="./jsonp.ts" />
+/// <reference path="../index.ts" />
 (function (IdealPostcodes) {
     var Transport;
     (function (Transport) {
@@ -485,6 +535,11 @@ var IdealPostcodes;
 /// <reference path="../transport/index.ts" />
 /// <reference path="../transport/utils.ts" />
 var IdealPostcodes;
+/// <reference path="../index.ts" />
+/// <reference path="../utils/utils.ts" />
+/// <reference path="../utils/cache.ts" />
+/// <reference path="../transport/index.ts" />
+/// <reference path="../transport/utils.ts" />
 (function (IdealPostcodes) {
     var extend = IdealPostcodes.Utils.extend;
     var XhrUtils = IdealPostcodes.Transport;
@@ -494,8 +549,8 @@ var IdealPostcodes;
     var constructAutocompleteQuery = XhrUtils.constructAutocompleteQueryString;
     var Client = (function () {
         function Client(options) {
-            var _this = this;
             if (options === void 0) { options = {}; }
+            var _this = this;
             this.api_key = options.api_key;
             this.tls = options.tls === undefined ? IdealPostcodes.TLS : options.tls;
             this.version = options.version === undefined ? IdealPostcodes.VERSION : options.version;
@@ -522,7 +577,7 @@ var IdealPostcodes;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
             var query = options.postcode;
-            var cachedResponse = this.cache.getPostcodeQuery(query);
+            var cachedResponse = this.cache.getPostcodeQuery(queryString);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
@@ -534,7 +589,7 @@ var IdealPostcodes;
                     return callback(null, [], xhr);
                 if (error)
                     return callback(error, null, xhr);
-                _this.cache.cachePostcodeQuery(query, data.result);
+                _this.cache.cachePostcodeQuery(queryString, data.result);
                 return callback(null, data.result, xhr);
             });
         };
@@ -545,7 +600,7 @@ var IdealPostcodes;
             var queryString = constructQuery(options);
             extend(queryString, constructAddressQuery(options));
             var query = options.query;
-            var cachedResponse = this.cache.getAddressQuery(query);
+            var cachedResponse = this.cache.getAddressQuery(queryString);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
@@ -555,7 +610,7 @@ var IdealPostcodes;
             }, function (error, data, xhr) {
                 if (error)
                     return callback(error, null, xhr);
-                _this.cache.cacheAddressQuery(query, data.result);
+                _this.cache.cacheAddressQuery(queryString, data.result);
                 return callback(null, data.result, xhr);
             });
         };
@@ -566,7 +621,7 @@ var IdealPostcodes;
             var queryString = constructQuery(options);
             extend(queryString, constructAutocompleteQuery(options));
             var query = options.query;
-            var cachedResponse = this.cache.getAutocompleteQuery(query);
+            var cachedResponse = this.cache.getAutocompleteQuery(queryString);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             if (!this.strictAuthorisation) {
@@ -580,7 +635,7 @@ var IdealPostcodes;
             }, function (error, data, xhr) {
                 if (error)
                     return callback(error, null, xhr);
-                _this.cache.cacheAutocompleteQuery(query, data.result);
+                _this.cache.cacheAutocompleteQuery(queryString, data.result);
                 return callback(null, data.result, xhr);
             });
         };
@@ -590,7 +645,7 @@ var IdealPostcodes;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
             var id = options.id;
-            var cachedResponse = this.cache.getUdprnQuery(id);
+            var cachedResponse = this.cache.getUdprnQuery(queryString);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
@@ -600,7 +655,7 @@ var IdealPostcodes;
             }, function (error, data, xhr) {
                 if (error)
                     return callback(error, null, xhr);
-                _this.cache.cacheUdprnQuery(id, data.result);
+                _this.cache.cacheUdprnQuery(queryString, data.result);
                 return callback(null, data.result, xhr);
             });
         };
@@ -610,7 +665,7 @@ var IdealPostcodes;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
             var id = options.id;
-            var cachedResponse = this.cache.getUmprnQuery(id);
+            var cachedResponse = this.cache.getUmprnQuery(queryString);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
@@ -620,7 +675,7 @@ var IdealPostcodes;
             }, function (error, data, xhr) {
                 if (error)
                     return callback(error, null, xhr);
-                _this.cache.cacheUmprnQuery(id, data.result);
+                _this.cache.cacheUmprnQuery(queryString, data.result);
                 return callback(null, data.result, xhr);
             });
         };

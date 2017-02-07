@@ -17,9 +17,11 @@ describe("Postcode Resource", () => {
 				expect(error).toBeNull();
 				expect(addresses.length).toBeGreaterThan(0);
 				expect(addresses[0].postcode).toEqual("ID1 1QD");
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/postcodes/" + encodeURIComponent(postcode));
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/postcodes/" + encodeURIComponent(postcode));
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.postcodes.results);
@@ -31,9 +33,11 @@ describe("Postcode Resource", () => {
 			}, (error, addresses, xhr) => {
 				expect(error).toBeNull();
 				expect(addresses.length).toEqual(0);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/postcodes/" + encodeURIComponent(postcode));
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/postcodes/" + encodeURIComponent(postcode));
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.postcodes.noResults);
@@ -49,10 +53,12 @@ describe("Postcode Resource", () => {
 				expect(addresses[0].line_1).toBeDefined();
 				expect(addresses[0].postcode).toBeDefined();
 				expect(Object.keys(addresses[0]).length).toEqual(2);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/postcodes/" + encodeURIComponent(postcode));
-				expect(request.query.filter).toEqual("line_1,postcode");
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/postcodes/" + encodeURIComponent(postcode));
+					expect(request.query.filter).toEqual("line_1,postcode");
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.postcodes.filteredResults);
@@ -66,9 +72,11 @@ describe("Postcode Resource", () => {
 			}, (error, addresses, xhr) => {
 				expect(error).not.toBeNull();
 				expect(error.responseCode).toEqual(4010);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/postcodes/" + encodeURIComponent(postcode));
-				expect(xhr.requestHeaders.Authorization).toContain(api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/postcodes/" + encodeURIComponent(postcode));
+					expect(xhr.requestHeaders.Authorization).toContain(api_key);
+				}
 				done();
 			});
 			expectResponse(responses.invalidKey);

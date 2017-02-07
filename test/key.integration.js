@@ -10,8 +10,10 @@ describe("Key Resource", () => {
 			client.checkKeyUsability({}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.available).toEqual(true);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/keys/" + api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/keys/" + api_key);
+				}
 				done();
 			});
 			expectResponse(responses.keys.usable);
@@ -22,8 +24,10 @@ describe("Key Resource", () => {
 			client.checkKeyUsability({}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.available).toEqual(false);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/keys/" + api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/keys/" + api_key);
+				}
 				done();
 			});
 			expectResponse(responses.keys.notUsable);

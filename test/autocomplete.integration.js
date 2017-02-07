@@ -17,10 +17,12 @@ describe("Address Resource", () => {
 			}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.hits.length).toBeGreaterThan(0);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/autocomplete/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(request.query.api_key).toEqual(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/autocomplete/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.api_key).toEqual(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.autocomplete.results);
@@ -32,10 +34,12 @@ describe("Address Resource", () => {
 			}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.hits.length).toEqual(0);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/autocomplete/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(request.query.api_key).toEqual(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/autocomplete/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.api_key).toEqual(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.autocomplete.noResults);
@@ -48,13 +52,55 @@ describe("Address Resource", () => {
 			}, (error, response, xhr) => {
 				expect(error).not.toBeNull();
 				expect(error.responseCode).toEqual(4010);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/autocomplete/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(request.query.api_key).toEqual("bogus");
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/autocomplete/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.api_key).toEqual("bogus");
+				}
 				done();
 			});
 			expectResponse(responses.invalidKey);
+		});
+		it ("restricts results by post_town", done => {
+			const query = "10 downing str";
+			const post_town = "london"
+			client.lookupAutocomplete({
+				query: query,
+				post_town: [post_town]
+			}, (error, response, xhr) => {
+				expect(error).toBeNull();
+				const addresses = response.hits;
+				expect(addresses.length).toEqual(2);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/autocomplete/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.post_town).toEqual(post_town);
+				}
+				done();
+			});
+			expectResponse(responses.addresses.postTownFilteredResult);
+		});
+		it ("restricts results by postcode_outward", done => {
+			const query = "10 downing str";
+			const postcode_outward = "sw1a"
+			client.lookupAutocomplete({
+				query: query,
+				postcode_outward: [postcode_outward]
+			}, (error, response, xhr) => {
+				expect(error).toBeNull();
+				const addresses = response.hits;
+				expect(addresses.length).toEqual(1);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/autocomplete/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.postcode_outward).toEqual(postcode_outward);
+				}
+				done();
+			});
+			expectResponse(responses.addresses.outwardFilteredResult);
 		});
 		it ("limits suggestions", done => {
 			const limit = 1;
@@ -65,11 +111,13 @@ describe("Address Resource", () => {
 			}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.hits.length).toEqual(1);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/autocomplete/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(request.query.limit).toEqual(limit.toString());
-				expect(request.query.api_key).toEqual(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/autocomplete/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.limit).toEqual(limit.toString());
+					expect(request.query.api_key).toEqual(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.autocomplete.limitedResults);

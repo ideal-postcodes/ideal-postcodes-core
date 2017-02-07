@@ -5,6 +5,8 @@ if (!window.responses) window.responses = {};
 	var limitedResults = '{"code":2000,"message":"Success","result":{"hits":[{"suggestion":"10 Downing Avenue, Guildford, GU2","udprn":10093397,"urls":{"udprn":"/v1/udprn/10093397"}}]}}';
 	var noResults = '{"result":{"hits":[]},"code":2000,"message":"Success"}';
 	var invalidKey = '{"code":4010,"message":"Invalid Key. For more information see http://ideal-postcodes.co.uk/documentation/response-codes#4010"}';
+	var outwardFilteredResult = '{"result":{"hits":[{"suggestion":"Prime Minister & First Lord Of The Treasury, 10 Downing Street, London, SW1A","urls":{"udprn":"/v1/udprn/23747771"},"udprn":23747771}]},"code":2000,"message":"Success"}';
+	var postTownFilteredResult = '{"result":{"hits":[{"suggestion":"Flat 10, Downing Court, Grenville Street, London, WC1N","urls":{"udprn":"/v1/udprn/26245117"},"udprn":26245117},{"suggestion":"Prime Minister & First Lord Of The Treasury, 10 Downing Street, London, SW1A","urls":{"udprn":"/v1/udprn/23747771"},"udprn":23747771}]},"code":2000,"message":"Success"}';
 
 	responses.autocomplete = {
 		results: {
@@ -21,6 +23,16 @@ if (!window.responses) window.responses = {};
 			status: 200,
 			contentType: "application/json",
 			responseText: noResults
+		},
+		outwardFilteredResult: {
+			status: 200,
+			contentType: "application/json",
+			responseText: outwardFilteredResult
+		},
+		postTownFilteredResult: {
+			status: 200,
+			contentType: "application/json",
+			responseText: postTownFilteredResult
 		}
 	}
 }(window.responses));

@@ -20,10 +20,12 @@ describe("Address Resource", () => {
 				expect(response.page).toEqual(0);
 				expect(response.limit).toEqual(10);
 				expect(response.hits[0].postcode).toEqual("ID1 1QD");
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.addresses.results);
@@ -35,10 +37,12 @@ describe("Address Resource", () => {
 			}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.total).toEqual(0);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.addresses.noResults);
@@ -55,14 +59,62 @@ describe("Address Resource", () => {
 				expect(addresses[0].line_1).toBeDefined();
 				expect(addresses[0].postcode).toBeDefined();
 				expect(Object.keys(addresses[0]).length).toEqual(2);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(request.query.filter).toEqual("line_1,postcode");
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.filter).toEqual("line_1,postcode");
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.addresses.filteredResults);
+		});
+		it ("restricts results by post_town", done => {
+			const query = "10 downing street";
+			const post_town = "london"
+			client.lookupAddress({
+				query: query,
+				post_town: [post_town]
+			}, (error, response, xhr) => {
+				expect(error).toBeNull();
+				const addresses = response.hits;
+				expect(addresses.length).toEqual(2);
+				addresses.forEach(address => 
+					expect(address.post_town.toUpperCase())
+						.toEqual(post_town.toUpperCase()));
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.post_town).toEqual(post_town);
+				}
+				done();
+			});
+			expectResponse(responses.addresses.postTownFilteredResult);
+		});
+		it ("restricts results by postcode_outward", done => {
+			const query = "10 downing street";
+			const postcode_outward = "sw1a"
+			client.lookupAddress({
+				query: query,
+				postcode_outward: [postcode_outward]
+			}, (error, response, xhr) => {
+				expect(error).toBeNull();
+				const addresses = response.hits;
+				expect(addresses.length).toEqual(1);
+				addresses.forEach(address => 
+					expect(address.postcode_outward.toUpperCase())
+						.toEqual(postcode_outward.toUpperCase()));
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.postcode_outward).toEqual(postcode_outward);
+				}
+				done();
+			});
+			expectResponse(responses.addresses.outwardFilteredResult);
 		});
 		it ("limits results", done => {
 			const query = "10 high street";
@@ -75,11 +127,13 @@ describe("Address Resource", () => {
 				expect(response.page).toEqual(0);
 				expect(response.limit).toEqual(1);
 				expect(response.hits.length).toEqual(1);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(request.query.limit).toEqual(limit.toString());
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.limit).toEqual(limit.toString());
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.addresses.limitedResults);
@@ -95,11 +149,13 @@ describe("Address Resource", () => {
 				expect(response.page).toEqual(1);
 				expect(response.limit).toEqual(10);
 				expect(response.hits.length).toEqual(10);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(request.query.page).toEqual(page);
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(request.query.page).toEqual(page);
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.addresses.paginatedResults);
@@ -113,10 +169,12 @@ describe("Address Resource", () => {
 			}, (error, addresses, xhr) => {
 				expect(error).not.toBeNull();
 				expect(error.responseCode).toEqual(4010);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/addresses");
-				expect(request.query.query).toEqual(query);
-				expect(xhr.requestHeaders.Authorization).toContain(api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/addresses");
+					expect(request.query.query).toEqual(query);
+					expect(xhr.requestHeaders.Authorization).toContain(api_key);
+				}
 				done();
 			});
 			expectResponse(responses.invalidKey);
@@ -156,9 +214,11 @@ describe("Address Resource", () => {
 			}, (error, address, xhr) => {
 				expect(error).toBeNull();
 				expect(address.postcode).toEqual("ID1 1QD");
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/udprn/0");
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/udprn/0");
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.udprn.results);
@@ -170,9 +230,11 @@ describe("Address Resource", () => {
 				expect(error).not.toBeNull();
 				expect(error.responseCode).toEqual(4044);
 				expect(address).toBeNull();
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/udprn/8");
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/udprn/8");
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.udprn.noResults);
@@ -186,10 +248,12 @@ describe("Address Resource", () => {
 				expect(address.line_1).toBeDefined();
 				expect(address.postcode).toBeDefined();
 				expect(Object.keys(address).length).toEqual(2);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/udprn/0");
-				expect(request.query.filter).toEqual("line_1,postcode");
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/udprn/0");
+					expect(request.query.filter).toEqual("line_1,postcode");
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.udprn.filteredResults);
@@ -227,9 +291,11 @@ describe("Address Resource", () => {
 			}, (error, address, xhr) => {
 				expect(error).toBeNull();
 				expect(address.postcode).toEqual("ID1 1QD");
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/umprn/0");
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/umprn/0");
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.umprn.results);
@@ -241,9 +307,11 @@ describe("Address Resource", () => {
 				expect(error).not.toBeNull();
 				expect(error.responseCode).toEqual(4046);
 				expect(address).toBeNull();
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/umprn/8");
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/umprn/8");
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.umprn.noResults);
@@ -257,10 +325,12 @@ describe("Address Resource", () => {
 				expect(address.line_1).toBeDefined();
 				expect(address.postcode).toBeDefined();
 				expect(Object.keys(address).length).toEqual(2);
-				const request = parseUrl(xhr.url);
-				expect(request.path).toEqual("v1/umprn/0");
-				expect(request.query.filter).toEqual("line_1,postcode");
-				expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				if (stubAjax) {
+					const request = parseUrl(xhr.url);
+					expect(request.path).toEqual("v1/umprn/0");
+					expect(request.query.filter).toEqual("line_1,postcode");
+					expect(xhr.requestHeaders.Authorization).toContain(test_api_key);
+				}
 				done();
 			});
 			expectResponse(responses.umprn.filteredResults);

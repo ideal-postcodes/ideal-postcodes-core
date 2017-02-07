@@ -18,9 +18,11 @@ namespace IdealPostcodes {
 	};
 
 	export class Cache {
+		protected active: boolean;
 		protected store: ResponseStore;
 
 		constructor() {
+			this.active = true;
 			this.store = {
 				postcodeStore: {},
 				addressStore: {},
@@ -30,52 +32,70 @@ namespace IdealPostcodes {
 			};
 		}
 
+		disable(): void {
+			this.active = false;
+		}
+
+		enable(): void {
+			this.active = true;
+		}
+
 		cacheAddressQuery(qs: QueryStringObject, response: Object): void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			this.store.addressStore[id] = response;
 		}
 
 		getAddressQuery(qs: QueryStringObject): Object|void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			return this.store.addressStore[id];
 		}
 
 		cachePostcodeQuery(qs: QueryStringObject, response: Object): void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			this.store.postcodeStore[id] = response;
 		}
 
 		getPostcodeQuery(qs: QueryStringObject): Object|void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			return this.store.postcodeStore[id];
 		}
 
 		cacheAutocompleteQuery(qs: QueryStringObject, response: Object): void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			this.store.autocompleteStore[id] = response;
 		}
 
 		getAutocompleteQuery(qs: QueryStringObject): Object|void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			return this.store.autocompleteStore[id];
 		}
 
 		cacheUdprnQuery(qs: QueryStringObject, response: Object): void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			this.store.udprnStore[id] = response;
 		}
 
 		getUdprnQuery(qs: QueryStringObject): Object | void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			return this.store.udprnStore[id];
 		}
 
 		cacheUmprnQuery(qs: QueryStringObject, response: Object): void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			this.store.umprnStore[id] = response;
 		}
 
 		getUmprnQuery(qs: QueryStringObject): Object | void {
+			if (!this.active) return;
 			const id = generateCacheId(qs);
 			return this.store.umprnStore[id];
 		}

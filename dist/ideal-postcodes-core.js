@@ -198,6 +198,8 @@ var IdealPostcodes;
         Transport.constructAutocompleteQueryString = function (options) {
             var queryString = {};
             queryString["query"] = options.query;
+            if (options.limit)
+                queryString["limit"] = options.limit;
             return queryString;
         };
         Transport.constructAddressQueryString = function (options) {

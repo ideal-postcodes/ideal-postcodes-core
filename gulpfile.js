@@ -145,6 +145,7 @@ gulp.task("webserver", function() {
   gulp.src("./")
     .pipe(server({
       livereload: true,
+      filter: (file, cb) => cb(!/\.git$|node_modules/.test(file)),
       directoryListing: true,
       clientConsole: true,
       open: true

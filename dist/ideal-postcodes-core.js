@@ -94,6 +94,16 @@ var IdealPostcodes;
     };
     var Cache = (function () {
         function Cache() {
+            this.initialiseStore();
+            this.active = true;
+        }
+        Cache.prototype.disable = function () {
+            this.active = false;
+        };
+        Cache.prototype.enable = function () {
+            this.active = true;
+        };
+        Cache.prototype.initialiseStore = function () {
             this.store = {
                 postcodeStore: {},
                 addressStore: {},
@@ -101,44 +111,64 @@ var IdealPostcodes;
                 udprnStore: {},
                 umprnStore: {}
             };
-        }
+        };
         Cache.prototype.cacheAddressQuery = function (qs, response) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             this.store.addressStore[id] = response;
         };
         Cache.prototype.getAddressQuery = function (qs) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             return this.store.addressStore[id];
         };
         Cache.prototype.cachePostcodeQuery = function (qs, response) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             this.store.postcodeStore[id] = response;
         };
         Cache.prototype.getPostcodeQuery = function (qs) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             return this.store.postcodeStore[id];
         };
         Cache.prototype.cacheAutocompleteQuery = function (qs, response) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             this.store.autocompleteStore[id] = response;
         };
         Cache.prototype.getAutocompleteQuery = function (qs) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             return this.store.autocompleteStore[id];
         };
         Cache.prototype.cacheUdprnQuery = function (qs, response) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             this.store.udprnStore[id] = response;
         };
         Cache.prototype.getUdprnQuery = function (qs) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             return this.store.udprnStore[id];
         };
         Cache.prototype.cacheUmprnQuery = function (qs, response) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             this.store.umprnStore[id] = response;
         };
         Cache.prototype.getUmprnQuery = function (qs) {
+            if (!this.active)
+                return;
             var id = generateCacheId(qs);
             return this.store.umprnStore[id];
         };

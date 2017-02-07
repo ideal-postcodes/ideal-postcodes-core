@@ -40,6 +40,8 @@ namespace IdealPostcodes {
 		tags?: [string];
 	}
 
+	export interface QueryStringObject { [key: string]: string|number; };
+
 	export interface LookupPostcodeOptions extends BasicOptions {
 		postcode: string;
 	}

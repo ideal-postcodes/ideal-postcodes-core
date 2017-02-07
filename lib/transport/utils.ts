@@ -32,13 +32,13 @@ namespace IdealPostcodes {
 			return result.join("&");
 		};
 
-		export const constructHeaders = (headerOptions: IdealPostcodes.BasicOptions): { [key: string]: string } | {} => {
+		export const constructHeaders = (headerOptions: BasicOptions): QueryStringObject | {} => {
 			const headers = {};
 			headers["Authorization"] = constructAuthenticationHeader(headerOptions);
 			return headers;
 		};
 
-		export const deconstructAuthenticationHeader = (authorizationHeader?: string): IdealPostcodes.BasicOptions => {
+		export const deconstructAuthenticationHeader = (authorizationHeader?: string): BasicOptions => {
 			const result = {};
 			if (!authorizationHeader) return result;
 			authorizationHeader
@@ -54,7 +54,7 @@ namespace IdealPostcodes {
 			return result;
 		};
 
-		export const constructAuthenticationHeader = (authOptions: IdealPostcodes.BasicOptions): string => {
+		export const constructAuthenticationHeader = (authOptions: BasicOptions): string => {
 			const authorizationHeader = [];
 			for (let i = 0; i < AllowedAuthorizationParameters.length; i++) {
 				let param = AllowedAuthorizationParameters[i];
@@ -66,7 +66,7 @@ namespace IdealPostcodes {
 			return `IDEALPOSTCODES ${authorizationHeader.join(" ")}`;
 		};
 
-		export const constructQueryString = (options: IdealPostcodes.BasicOptions): { [key: string]: string } | {} => {
+		export const constructQueryString = (options: BasicOptions): QueryStringObject => {
 			const queryString = {};
 			if (options.filter) queryString["filter"] = options.filter.join(",");
 			if (options.licensee) queryString["licensee"] = options.licensee;
@@ -74,7 +74,7 @@ namespace IdealPostcodes {
 			return queryString;
 		};
 
-		export const constructAutocompleteQueryString = (options: LookupAutocompleteOptions): { [key: string]: string } | {} => {
+		export const constructAutocompleteQueryString = (options: LookupAutocompleteOptions): QueryStringObject => {
 			const queryString = {};
 			queryString["query"] = options.query;
 			if (options.limit) queryString["limit"] = options.limit;
@@ -87,7 +87,7 @@ namespace IdealPostcodes {
 			return queryString;
 		};
 
-		export const constructAddressQueryString = (options: LookupAddressOptions): { [key: string]: string } | {} => {
+		export const constructAddressQueryString = (options: LookupAddressOptions): QueryStringObject => {
 			const queryString = {};
 			queryString["query"] = options.query;
 			queryString["page"] = options.page || 0;

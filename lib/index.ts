@@ -52,7 +52,7 @@ namespace IdealPostcodes {
 		limit?: number;
 	}
 
-	interface SearchFilters {
+	export interface SearchFilters {
 		postcode_outward?: [string];
 		post_town?: [string];
 	}

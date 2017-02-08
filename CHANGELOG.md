@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.3.1] - 2017-02-08
+- Export searchFilter interface
+
 ## [0.3.0] - 2017-02-07
 - Added `postcode_outward` and `post_town` parameters to `lookupAutocomplete` and `lookupAddress` methods
 - Added `limit` parameter to `lookupAutocomplete` method

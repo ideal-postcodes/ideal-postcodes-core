@@ -51,7 +51,6 @@ namespace IdealPostcodes {
 			const headers = constructHeaders(options);
 			const queryString = constructQuery(options);
 
-			const query = options.postcode;
 			const cachedResponse = this.cache.getPostcodeQuery(queryString);
 			if (cachedResponse) return callback(null, cachedResponse);
 
@@ -73,7 +72,6 @@ namespace IdealPostcodes {
 			const queryString = constructQuery(options);
 			extend(queryString, constructAddressQuery(options));
 
-			const query = options.query;
 			const cachedResponse = this.cache.getAddressQuery(queryString);
 			if (cachedResponse) return callback(null, cachedResponse);
 
@@ -94,7 +92,6 @@ namespace IdealPostcodes {
 			const queryString = constructQuery(options);
 			extend(queryString, constructAutocompleteQuery(options));
 
-			const query = options.query;
 			const cachedResponse = this.cache.getAutocompleteQuery(queryString);
 			if (cachedResponse) return callback(null, cachedResponse);
 
@@ -118,13 +115,12 @@ namespace IdealPostcodes {
 			options.api_key = this.api_key;
 			const headers = constructHeaders(options);
 			const queryString = constructQuery(options);
-			const id = options.id;
 
 			const cachedResponse = this.cache.getUdprnQuery(queryString);
 			if (cachedResponse) return callback(null, cachedResponse);
 
 			IdealPostcodes.Transport.request({
-				url: `${this.apiUrl()}/udprn/${id}`,
+				url: `${this.apiUrl()}/udprn/${options.id}`,
 				headers: headers,
 				queryString: queryString
 			}, (error, data, xhr) => {
@@ -138,13 +134,12 @@ namespace IdealPostcodes {
 			options.api_key = this.api_key;
 			const headers = constructHeaders(options);
 			const queryString = constructQuery(options);
-			const id = options.id;
 
 			const cachedResponse = this.cache.getUmprnQuery(queryString);
 			if (cachedResponse) return callback(null, cachedResponse);
 
 			IdealPostcodes.Transport.request({
-				url: `${this.apiUrl()}/umprn/${id}`,
+				url: `${this.apiUrl()}/umprn/${options.id}`,
 				headers: headers,
 				queryString: queryString
 			}, (error, data, xhr) => {

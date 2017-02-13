@@ -134,7 +134,7 @@ describe("Address Resource", () => {
 				}, (error, response, xhr) => {
 					expect(error).toBeNull();
 					expect(response.hits.length).toBeGreaterThan(0);
-					expect(xhr).not.toBeDefined();
+					expect(xhr).toBeNull();
 					done();
 				});
 			});
@@ -162,6 +162,27 @@ describe("Address Resource", () => {
 			client.autocompleteAddress({ query: "10 downing" });
 			client.autocompleteAddress({ query: "10 downing" });
 			client.autocompleteAddress({ query: "10 downing" });
+			setTimeout(() => {
+				expectResponse(responses.autocomplete.results);
+			}, 200);
+		});
+
+		it ("returns the request options object", done => {
+			let query = "10";
+			client.registerAutocompleteCallback((error, data, xhr, options) => {
+				expect(error).toBeNull();
+				expect(options.query).toEqual(query);
+				query += "0";
+				if (query === "1000") {
+					return done();
+				} else {
+					client.autocompleteAddress({ query: query });
+				}
+				setTimeout(() => {
+					expectResponse(responses.autocomplete.results);
+				}, 200);
+			});
+			client.autocompleteAddress({ query: query })
 			setTimeout(() => {
 				expectResponse(responses.autocomplete.results);
 			}, 200);

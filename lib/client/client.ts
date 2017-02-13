@@ -19,7 +19,7 @@ namespace IdealPostcodes {
 		protected version: string;
 		protected cache: IdealPostcodes.Cache;
 		protected strictAuthorisation: boolean;
-		protected autocompleteCallback: XhrCallback;
+		protected autocompleteCallback: AutocompleteXhrCallback;
 		protected debouncedAutocomplete: (options: LookupAutocompleteOptions) => void;
 
 		constructor(options: ClientOptions = {}) {
@@ -31,6 +31,9 @@ namespace IdealPostcodes {
 			this.cache = new IdealPostcodes.Cache();
 			const self = this;
 			this.autocompleteCallback = () => {};
+
+			// Need to consider caching as well! Can't store meta in cache store
+
 			this.debouncedAutocomplete = IdealPostcodes.Utils.debounce((options: LookupAutocompleteOptions) => {
 				this.lookupAutocomplete(options, self.autocompleteCallback);
 			});
@@ -86,14 +89,14 @@ namespace IdealPostcodes {
 			});
 		}
 
-		lookupAutocomplete(options: LookupAutocompleteOptions, callback: XhrCallback): void {
+		lookupAutocomplete(options: LookupAutocompleteOptions, callback: AutocompleteXhrCallback): void {
 			options.api_key = this.api_key;
 			const headers = constructHeaders(options);
 			const queryString = constructQuery(options);
 			extend(queryString, constructAutocompleteQuery(options));
 
 			const cachedResponse = this.cache.getAutocompleteQuery(queryString);
-			if (cachedResponse) return callback(null, cachedResponse);
+			if (cachedResponse) return callback(null, cachedResponse, null, options);
 
 			if (!this.strictAuthorisation) {
 				queryString["api_key"] = this.api_key;
@@ -105,9 +108,9 @@ namespace IdealPostcodes {
 				headers: headers,
 				queryString: queryString
 			}, (error, data, xhr) => {
-				if (error) return callback(error, null, xhr);
+				if (error) return callback(error, null, xhr, options);
 				this.cache.cacheAutocompleteQuery(queryString, data.result);
-				return callback(null, data.result, xhr);
+				return callback(null, data.result, xhr, options);
 			});
 		}
 
@@ -163,7 +166,7 @@ namespace IdealPostcodes {
 			this.debouncedAutocomplete(options);
 		}
 
-		registerAutocompleteCallback(callback: XhrCallback): void {
+		registerAutocompleteCallback(callback: AutocompleteXhrCallback): void {
 			this.autocompleteCallback = callback;
 		}
 	}

@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.3.2] - 2017-02-09
+- Extend autocomplete callback to return original request options
+
 ## [0.3.1] - 2017-02-08
 - Export searchFilter interface
 

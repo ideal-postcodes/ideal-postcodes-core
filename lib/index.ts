@@ -15,6 +15,10 @@ namespace IdealPostcodes {
 		(error: any, data: any, xhr?: XMLHttpRequest): void;
 	}
 
+	export interface AutocompleteXhrCallback {
+		(error: any, data: any, xhr?: XMLHttpRequest, options?: LookupAutocompleteOptions): void;
+	}
+
 	export interface XhrOptions {
 		url: string;
 		method?: string;

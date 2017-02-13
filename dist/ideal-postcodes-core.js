@@ -1,6 +1,6 @@
 /**
  * ideal-postcodes-core - Ideal Postcodes core frontend javascript library
- * @version v0.3.1
+ * @version v0.3.2
  * @link https://ideal-postcodes.co.uk/
  * @license MIT
  */
@@ -589,6 +589,7 @@ var IdealPostcodes;
             this.cache = new IdealPostcodes.Cache();
             var self = this;
             this.autocompleteCallback = function () { };
+            // Need to consider caching as well! Can't store meta in cache store
             this.debouncedAutocomplete = IdealPostcodes.Utils.debounce(function (options) {
                 _this.lookupAutocomplete(options, self.autocompleteCallback);
             });
@@ -606,7 +607,6 @@ var IdealPostcodes;
             options.api_key = this.api_key;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
-            var query = options.postcode;
             var cachedResponse = this.cache.getPostcodeQuery(queryString);
             if (cachedResponse)
                 return callback(null, cachedResponse);
@@ -629,7 +629,6 @@ var IdealPostcodes;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
             extend(queryString, constructAddressQuery(options));
-            var query = options.query;
             var cachedResponse = this.cache.getAddressQuery(queryString);
             if (cachedResponse)
                 return callback(null, cachedResponse);
@@ -650,10 +649,9 @@ var IdealPostcodes;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
             extend(queryString, constructAutocompleteQuery(options));
-            var query = options.query;
             var cachedResponse = this.cache.getAutocompleteQuery(queryString);
             if (cachedResponse)
-                return callback(null, cachedResponse);
+                return callback(null, cachedResponse, null, options);
             if (!this.strictAuthorisation) {
                 queryString["api_key"] = this.api_key;
                 delete headers["Authorization"];
@@ -664,9 +662,9 @@ var IdealPostcodes;
                 queryString: queryString
             }, function (error, data, xhr) {
                 if (error)
-                    return callback(error, null, xhr);
+                    return callback(error, null, xhr, options);
                 _this.cache.cacheAutocompleteQuery(queryString, data.result);
-                return callback(null, data.result, xhr);
+                return callback(null, data.result, xhr, options);
             });
         };
         Client.prototype.lookupUdprn = function (options, callback) {
@@ -674,12 +672,11 @@ var IdealPostcodes;
             options.api_key = this.api_key;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
-            var id = options.id;
             var cachedResponse = this.cache.getUdprnQuery(queryString);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
-                url: this.apiUrl() + "/udprn/" + id,
+                url: this.apiUrl() + "/udprn/" + options.id,
                 headers: headers,
                 queryString: queryString
             }, function (error, data, xhr) {
@@ -694,12 +691,11 @@ var IdealPostcodes;
             options.api_key = this.api_key;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
-            var id = options.id;
             var cachedResponse = this.cache.getUmprnQuery(queryString);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
-                url: this.apiUrl() + "/umprn/" + id,
+                url: this.apiUrl() + "/umprn/" + options.id,
                 headers: headers,
                 queryString: queryString
             }, function (error, data, xhr) {

@@ -87,6 +87,7 @@ describe("Postcode Resource", () => {
 			}, (error, addresses, xhr) => {
 				expect(error).toBeNull();
 				expect(addresses.length).toBeGreaterThan(0);
+				expect(client.cache.store.postcodeStore["postcode=ID11QD"]).toBeDefined();
 				expect(xhr).toBeDefined();
 				client.lookupPostcode({
 					postcode: "ID11QD",

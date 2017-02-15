@@ -128,6 +128,7 @@ describe("Address Resource", () => {
 			}, (error, response, xhr) => {
 				expect(error).toBeNull();
 				expect(response.hits.length).toBeGreaterThan(0);
+				expect(client.cache.store.autocompleteStore["query=10 downing"]).toBeDefined();
 				expect(xhr).toBeDefined();
 				client.lookupAutocomplete({
 					query: "10 downing",

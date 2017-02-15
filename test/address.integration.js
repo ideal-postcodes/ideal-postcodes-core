@@ -185,6 +185,7 @@ describe("Address Resource", () => {
 			}, (error, addresses, xhr) => {
 				expect(error).toBeNull();
 				expect(addresses.total).toBeGreaterThan(0);
+				expect(client.cache.store.addressStore["query=ID11QD"]).toBeDefined();
 				expect(xhr).toBeDefined();
 				client.lookupAddress({
 					query: "ID11QD",
@@ -264,6 +265,7 @@ describe("Address Resource", () => {
 			}, (error, address, xhr) => {
 				expect(error).toBeNull();
 				expect(xhr).toBeDefined();
+				expect(client.cache.store.udprnStore["id=0"]).toBeDefined();
 				client.lookupUdprn({
 					id: 0,
 				}, (error, addresses, xhr) => {
@@ -341,6 +343,7 @@ describe("Address Resource", () => {
 			}, (error, address, xhr) => {
 				expect(error).toBeNull();
 				expect(xhr).toBeDefined();
+				expect(client.cache.store.umprnStore["id=0"]).toBeDefined();
 				client.lookupUmprn({
 					id: 0,
 				}, (error, addresses, xhr) => {

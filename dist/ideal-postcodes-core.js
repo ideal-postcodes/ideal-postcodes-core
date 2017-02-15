@@ -1,6 +1,6 @@
 /**
  * ideal-postcodes-core - Ideal Postcodes core frontend javascript library
- * @version v0.3.2
+ * @version v0.3.3
  * @link https://ideal-postcodes.co.uk/
  * @license MIT
  */
@@ -79,6 +79,7 @@ var IdealPostcodes;
 /// <reference path="../index.ts" />
 (function (IdealPostcodes) {
     var cacheArguments = [
+        "id",
         "query",
         "limit",
         "page",

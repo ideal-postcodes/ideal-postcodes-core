@@ -3,6 +3,7 @@
 namespace IdealPostcodes {
 	const cacheArguments = [
 		"id",
+		"postcode",
 		"query",
 		"limit",
 		"page",
@@ -11,7 +12,7 @@ namespace IdealPostcodes {
 		"filter"
 	];
 
-	const generateCacheId = (qs: QueryStringObject): string => {
+	const generateCacheId = (qs: BasicOptions): string => {
 		return cacheArguments.map(arg => [arg, qs[arg]])
 			.filter(elem => elem[1] !== undefined)
 			.map(elem => elem.join("="))
@@ -45,63 +46,63 @@ namespace IdealPostcodes {
 			};
 		}
 
-		cacheAddressQuery(qs: QueryStringObject, response: Object): void {
+		cacheAddressQuery(options: LookupAddressOptions, response: Object): void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			this.store.addressStore[id] = response;
 		}
 
-		getAddressQuery(qs: QueryStringObject): Object|void {
+		getAddressQuery(options: LookupAddressOptions): Object|void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			return this.store.addressStore[id];
 		}
 
-		cachePostcodeQuery(qs: QueryStringObject, response: Object): void {
+		cachePostcodeQuery(options: LookupPostcodeOptions, response: Object): void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			this.store.postcodeStore[id] = response;
 		}
 
-		getPostcodeQuery(qs: QueryStringObject): Object|void {
+		getPostcodeQuery(options: LookupPostcodeOptions): Object|void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			return this.store.postcodeStore[id];
 		}
 
-		cacheAutocompleteQuery(qs: QueryStringObject, response: Object): void {
+		cacheAutocompleteQuery(options: LookupAutocompleteOptions, response: Object): void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			this.store.autocompleteStore[id] = response;
 		}
 
-		getAutocompleteQuery(qs: QueryStringObject): Object|void {
+		getAutocompleteQuery(options: LookupAutocompleteOptions): Object|void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			return this.store.autocompleteStore[id];
 		}
 
-		cacheUdprnQuery(qs: QueryStringObject, response: Object): void {
+		cacheUdprnQuery(options: LookupIdOptions, response: Object): void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			this.store.udprnStore[id] = response;
 		}
 
-		getUdprnQuery(qs: QueryStringObject): Object | void {
+		getUdprnQuery(options: LookupIdOptions): Object | void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			return this.store.udprnStore[id];
 		}
 
-		cacheUmprnQuery(qs: QueryStringObject, response: Object): void {
+		cacheUmprnQuery(options: LookupIdOptions, response: Object): void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			this.store.umprnStore[id] = response;
 		}
 
-		getUmprnQuery(qs: QueryStringObject): Object | void {
+		getUmprnQuery(options: LookupIdOptions): Object | void {
 			if (!this.active) return;
-			const id = generateCacheId(qs);
+			const id = generateCacheId(options);
 			return this.store.umprnStore[id];
 		}
 	}

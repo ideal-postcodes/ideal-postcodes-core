@@ -54,7 +54,7 @@ namespace IdealPostcodes {
 			const headers = constructHeaders(options);
 			const queryString = constructQuery(options);
 
-			const cachedResponse = this.cache.getPostcodeQuery(queryString);
+			const cachedResponse = this.cache.getPostcodeQuery(options);
 			if (cachedResponse) return callback(null, cachedResponse);
 
 			IdealPostcodes.Transport.request({
@@ -64,7 +64,7 @@ namespace IdealPostcodes {
 			}, (error, data, xhr) => {
 				if (error && error.responseCode === 4040) return callback(null, [], xhr);
 				if (error) return callback(error, null, xhr);
-				this.cache.cachePostcodeQuery(queryString, data.result);
+				this.cache.cachePostcodeQuery(options, data.result);
 				return callback(null, data.result, xhr);
 			});
 		}
@@ -75,7 +75,7 @@ namespace IdealPostcodes {
 			const queryString = constructQuery(options);
 			extend(queryString, constructAddressQuery(options));
 
-			const cachedResponse = this.cache.getAddressQuery(queryString);
+			const cachedResponse = this.cache.getAddressQuery(options);
 			if (cachedResponse) return callback(null, cachedResponse);
 
 			IdealPostcodes.Transport.request({
@@ -84,7 +84,7 @@ namespace IdealPostcodes {
 				queryString: queryString
 			}, (error, data, xhr) => {
 				if (error) return callback(error, null, xhr);
-				this.cache.cacheAddressQuery(queryString, data.result);
+				this.cache.cacheAddressQuery(options, data.result);
 				return callback(null, data.result, xhr);
 			});
 		}
@@ -95,7 +95,7 @@ namespace IdealPostcodes {
 			const queryString = constructQuery(options);
 			extend(queryString, constructAutocompleteQuery(options));
 
-			const cachedResponse = this.cache.getAutocompleteQuery(queryString);
+			const cachedResponse = this.cache.getAutocompleteQuery(options);
 			if (cachedResponse) return callback(null, cachedResponse, null, options);
 
 			if (!this.strictAuthorisation) {
@@ -109,7 +109,7 @@ namespace IdealPostcodes {
 				queryString: queryString
 			}, (error, data, xhr) => {
 				if (error) return callback(error, null, xhr, options);
-				this.cache.cacheAutocompleteQuery(queryString, data.result);
+				this.cache.cacheAutocompleteQuery(options, data.result);
 				return callback(null, data.result, xhr, options);
 			});
 		}
@@ -119,7 +119,7 @@ namespace IdealPostcodes {
 			const headers = constructHeaders(options);
 			const queryString = constructQuery(options);
 
-			const cachedResponse = this.cache.getUdprnQuery(queryString);
+			const cachedResponse = this.cache.getUdprnQuery(options);
 			if (cachedResponse) return callback(null, cachedResponse);
 
 			IdealPostcodes.Transport.request({
@@ -128,7 +128,7 @@ namespace IdealPostcodes {
 				queryString: queryString
 			}, (error, data, xhr) => {
 				if (error) return callback(error, null, xhr);
-				this.cache.cacheUdprnQuery(queryString, data.result);
+				this.cache.cacheUdprnQuery(options, data.result);
 				return callback(null, data.result, xhr);
 			});
 		}
@@ -138,7 +138,7 @@ namespace IdealPostcodes {
 			const headers = constructHeaders(options);
 			const queryString = constructQuery(options);
 
-			const cachedResponse = this.cache.getUmprnQuery(queryString);
+			const cachedResponse = this.cache.getUmprnQuery(options);
 			if (cachedResponse) return callback(null, cachedResponse);
 
 			IdealPostcodes.Transport.request({
@@ -147,7 +147,7 @@ namespace IdealPostcodes {
 				queryString: queryString
 			}, (error, data, xhr) => {
 				if (error) return callback(error, null, xhr);
-				this.cache.cacheUmprnQuery(queryString, data.result);
+				this.cache.cacheUmprnQuery(options, data.result);
 				return callback(null, data.result, xhr);
 			});
 		}

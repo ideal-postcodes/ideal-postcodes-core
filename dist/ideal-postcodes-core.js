@@ -1,6 +1,6 @@
 /**
  * ideal-postcodes-core - Ideal Postcodes core frontend javascript library
- * @version v0.3.3
+ * @version v0.3.4
  * @link https://ideal-postcodes.co.uk/
  * @license MIT
  */
@@ -80,6 +80,7 @@ var IdealPostcodes;
 (function (IdealPostcodes) {
     var cacheArguments = [
         "id",
+        "postcode",
         "query",
         "limit",
         "page",
@@ -113,64 +114,64 @@ var IdealPostcodes;
                 umprnStore: {}
             };
         };
-        Cache.prototype.cacheAddressQuery = function (qs, response) {
+        Cache.prototype.cacheAddressQuery = function (options, response) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             this.store.addressStore[id] = response;
         };
-        Cache.prototype.getAddressQuery = function (qs) {
+        Cache.prototype.getAddressQuery = function (options) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             return this.store.addressStore[id];
         };
-        Cache.prototype.cachePostcodeQuery = function (qs, response) {
+        Cache.prototype.cachePostcodeQuery = function (options, response) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             this.store.postcodeStore[id] = response;
         };
-        Cache.prototype.getPostcodeQuery = function (qs) {
+        Cache.prototype.getPostcodeQuery = function (options) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             return this.store.postcodeStore[id];
         };
-        Cache.prototype.cacheAutocompleteQuery = function (qs, response) {
+        Cache.prototype.cacheAutocompleteQuery = function (options, response) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             this.store.autocompleteStore[id] = response;
         };
-        Cache.prototype.getAutocompleteQuery = function (qs) {
+        Cache.prototype.getAutocompleteQuery = function (options) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             return this.store.autocompleteStore[id];
         };
-        Cache.prototype.cacheUdprnQuery = function (qs, response) {
+        Cache.prototype.cacheUdprnQuery = function (options, response) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             this.store.udprnStore[id] = response;
         };
-        Cache.prototype.getUdprnQuery = function (qs) {
+        Cache.prototype.getUdprnQuery = function (options) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             return this.store.udprnStore[id];
         };
-        Cache.prototype.cacheUmprnQuery = function (qs, response) {
+        Cache.prototype.cacheUmprnQuery = function (options, response) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             this.store.umprnStore[id] = response;
         };
-        Cache.prototype.getUmprnQuery = function (qs) {
+        Cache.prototype.getUmprnQuery = function (options) {
             if (!this.active)
                 return;
-            var id = generateCacheId(qs);
+            var id = generateCacheId(options);
             return this.store.umprnStore[id];
         };
         return Cache;
@@ -608,7 +609,7 @@ var IdealPostcodes;
             options.api_key = this.api_key;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
-            var cachedResponse = this.cache.getPostcodeQuery(queryString);
+            var cachedResponse = this.cache.getPostcodeQuery(options);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
@@ -620,7 +621,7 @@ var IdealPostcodes;
                     return callback(null, [], xhr);
                 if (error)
                     return callback(error, null, xhr);
-                _this.cache.cachePostcodeQuery(queryString, data.result);
+                _this.cache.cachePostcodeQuery(options, data.result);
                 return callback(null, data.result, xhr);
             });
         };
@@ -630,7 +631,7 @@ var IdealPostcodes;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
             extend(queryString, constructAddressQuery(options));
-            var cachedResponse = this.cache.getAddressQuery(queryString);
+            var cachedResponse = this.cache.getAddressQuery(options);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
@@ -640,7 +641,7 @@ var IdealPostcodes;
             }, function (error, data, xhr) {
                 if (error)
                     return callback(error, null, xhr);
-                _this.cache.cacheAddressQuery(queryString, data.result);
+                _this.cache.cacheAddressQuery(options, data.result);
                 return callback(null, data.result, xhr);
             });
         };
@@ -650,7 +651,7 @@ var IdealPostcodes;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
             extend(queryString, constructAutocompleteQuery(options));
-            var cachedResponse = this.cache.getAutocompleteQuery(queryString);
+            var cachedResponse = this.cache.getAutocompleteQuery(options);
             if (cachedResponse)
                 return callback(null, cachedResponse, null, options);
             if (!this.strictAuthorisation) {
@@ -664,7 +665,7 @@ var IdealPostcodes;
             }, function (error, data, xhr) {
                 if (error)
                     return callback(error, null, xhr, options);
-                _this.cache.cacheAutocompleteQuery(queryString, data.result);
+                _this.cache.cacheAutocompleteQuery(options, data.result);
                 return callback(null, data.result, xhr, options);
             });
         };
@@ -673,7 +674,7 @@ var IdealPostcodes;
             options.api_key = this.api_key;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
-            var cachedResponse = this.cache.getUdprnQuery(queryString);
+            var cachedResponse = this.cache.getUdprnQuery(options);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
@@ -683,7 +684,7 @@ var IdealPostcodes;
             }, function (error, data, xhr) {
                 if (error)
                     return callback(error, null, xhr);
-                _this.cache.cacheUdprnQuery(queryString, data.result);
+                _this.cache.cacheUdprnQuery(options, data.result);
                 return callback(null, data.result, xhr);
             });
         };
@@ -692,7 +693,7 @@ var IdealPostcodes;
             options.api_key = this.api_key;
             var headers = constructHeaders(options);
             var queryString = constructQuery(options);
-            var cachedResponse = this.cache.getUmprnQuery(queryString);
+            var cachedResponse = this.cache.getUmprnQuery(options);
             if (cachedResponse)
                 return callback(null, cachedResponse);
             IdealPostcodes.Transport.request({
@@ -702,7 +703,7 @@ var IdealPostcodes;
             }, function (error, data, xhr) {
                 if (error)
                     return callback(error, null, xhr);
-                _this.cache.cacheUmprnQuery(queryString, data.result);
+                _this.cache.cacheUmprnQuery(options, data.result);
                 return callback(null, data.result, xhr);
             });
         };

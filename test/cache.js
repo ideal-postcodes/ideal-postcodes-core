@@ -86,43 +86,49 @@ describe("Cache", () => {
 
 	describe(".cacheUdprnQuery", () => {
 		it ("caches a query response", () => {
-			cache.cacheUdprnQuery({query: 8}, { bar: "baz" });
-			expect(cache.getUdprnQuery({query: 8}).bar).toEqual("baz");
+			cache.cacheUdprnQuery({id: 8}, { bar: "baz" });
+			cache.cacheUdprnQuery({id: 9}, { qux: "quux" });
+			expect(Object.keys(cache.store.udprnStore).length).toEqual(2);
+			expect(cache.getUdprnQuery({id: 8}).bar).toEqual("baz");
+			expect(cache.getUdprnQuery({id: 9}).qux).toEqual("quux");
 		});
 		it ("does not cache when disabled", () => {
 			cache.disable();
-			cache.cacheUdprnQuery({query: "1", page: 0}, {page: "0"});
+			cache.cacheUdprnQuery({id: "1", page: 0}, {page: "0"});
 			Object.keys(cache.store).forEach(storeName => {
 				const store = cache.store[storeName];
 				expect(Object.keys(store).length).toEqual(0);
 			});
 		});
 		it ("separates cache responses by non-query parameters", () => {
-			cache.cacheUdprnQuery({query: "1", page: 0}, {page: "0"});
-			cache.cacheUdprnQuery({query: "1", page: 1}, {page: "1"});
-			expect(cache.getUdprnQuery({query: 1, page: 0}).page).toEqual("0");
-			expect(cache.getUdprnQuery({query: 1, page: 1}).page).toEqual("1");
+			cache.cacheUdprnQuery({id: "1", page: 0}, {page: "0"});
+			cache.cacheUdprnQuery({id: "1", page: 1}, {page: "1"});
+			expect(cache.getUdprnQuery({id: 1, page: 0}).page).toEqual("0");
+			expect(cache.getUdprnQuery({id: 1, page: 1}).page).toEqual("1");
 		});
 	});
 
 	describe(".cacheUmprnQuery", () => {
 		it ("caches a query response", () => {
-			cache.cacheUmprnQuery({query: 8}, { bar: "baz" });
-			expect(cache.getUmprnQuery({query: 8}).bar).toEqual("baz");
+			cache.cacheUmprnQuery({id: 8}, { bar: "baz" });
+			cache.cacheUmprnQuery({id: 9}, { qux: "quux" });
+			expect(Object.keys(cache.store.umprnStore).length).toEqual(2);
+			expect(cache.getUmprnQuery({id: 8}).bar).toEqual("baz");
+			expect(cache.getUmprnQuery({id: 9}).qux).toEqual("quux");
 		});
 		it ("does not cache when disabled", () => {
 			cache.disable();
-			cache.cacheUmprnQuery({query: "1", page: 0}, {page: "0"});
+			cache.cacheUmprnQuery({id: "1", page: 0}, {page: "0"});
 			Object.keys(cache.store).forEach(storeName => {
 				const store = cache.store[storeName];
 				expect(Object.keys(store).length).toEqual(0);
 			});
 		});
 		it ("separates cache responses by non-query parameters", () => {
-			cache.cacheUmprnQuery({query: "1", page: 0}, {page: "0"});
-			cache.cacheUmprnQuery({query: "1", page: 1}, {page: "1"});
-			expect(cache.getUmprnQuery({query: 1, page: 0}).page).toEqual("0");
-			expect(cache.getUmprnQuery({query: 1, page: 1}).page).toEqual("1");
+			cache.cacheUmprnQuery({id: "1", page: 0}, {page: "0"});
+			cache.cacheUmprnQuery({id: "1", page: 1}, {page: "1"});
+			expect(cache.getUmprnQuery({id: 1, page: 0}).page).toEqual("0");
+			expect(cache.getUmprnQuery({id: 1, page: 1}).page).toEqual("1");
 		});
 	});
 
@@ -164,25 +170,25 @@ describe("Cache", () => {
 
 	describe(".getUdprnQuery", () => {
 		it ("returns undefined if lookup not present", () => {
-			expect(cache.getUdprnQuery({query: 8})).toBeUndefined();
+			expect(cache.getUdprnQuery({id: 8})).toBeUndefined();
 		});
 		it ("does not return cached responses when disabled", () => {
 			expect(cache.active).toEqual(true);
-			cache.cacheUdprnQuery({query: 8}, { bar: "baz" });
+			cache.cacheUdprnQuery({id: 8}, { bar: "baz" });
 			cache.disable();
-			expect(cache.getUdprnQuery({query: 8})).toBeUndefined();
+			expect(cache.getUdprnQuery({id: 8})).toBeUndefined();
 		});
 	});
 
 	describe(".getUmprnQuery", () => {
 		it ("returns undefined if lookup not present", () => {
-			expect(cache.getUmprnQuery({query: 8})).toBeUndefined();
+			expect(cache.getUmprnQuery({id: 8})).toBeUndefined();
 		});
 		it ("does not return cached responses when disabled", () => {
 			expect(cache.active).toEqual(true);
-			cache.cacheUmprnQuery({query: 8}, { bar: "baz" });
+			cache.cacheUmprnQuery({id: 8}, { bar: "baz" });
 			cache.disable();
-			expect(cache.getUmprnQuery({query: 8})).toBeUndefined();
+			expect(cache.getUmprnQuery({id: 8})).toBeUndefined();
 		});
 	});
 });

@@ -24,7 +24,10 @@ describe("Cache", () => {
 	describe(".cacheAddressQuery", () => {
 		it ("caches a query response", () => {
 			cache.cacheAddressQuery({query: "foo"}, { bar: "baz" });
+			cache.cacheAddressQuery({query: "qux"}, { quux: "quuz" });
+			expect(Object.keys(cache.store.addressStore).length).toEqual(2);
 			expect(cache.getAddressQuery({query: "foo"}).bar).toEqual("baz");
+			expect(cache.getAddressQuery({query: "qux"}).quux).toEqual("quuz");
 		});
 		it ("does not cache when disabled", () => {
 			cache.disable();
@@ -45,7 +48,10 @@ describe("Cache", () => {
 	describe(".cachePostcodeQuery", () => {
 		it ("caches a query response", () => {
 			cache.cachePostcodeQuery({query: "foo"}, { bar: "baz" });
+			cache.cachePostcodeQuery({query: "qux"}, { quux: "quuz" });
+			expect(Object.keys(cache.store.postcodeStore).length).toEqual(2);
 			expect(cache.getPostcodeQuery({query: "foo"}).bar).toEqual("baz");
+			expect(cache.getPostcodeQuery({query: "qux"}).quux).toEqual("quuz");
 		});
 		it ("does not cache when disabled", () => {
 			cache.disable();
@@ -66,7 +72,10 @@ describe("Cache", () => {
 	describe(".cacheAutocompleteQuery", () => {
 		it ("caches a query response", () => {
 			cache.cacheAutocompleteQuery({query: "foo"}, { bar: "baz" });
+			cache.cacheAutocompleteQuery({query: "qux"}, { quux: "quuz" });
+			expect(Object.keys(cache.store.autocompleteStore).length).toEqual(2);
 			expect(cache.getAutocompleteQuery({query: "foo"}).bar).toEqual("baz");
+			expect(cache.getAutocompleteQuery({query: "qux"}).quux).toEqual("quuz");
 		});
 		it ("does not cache when disabled", () => {
 			cache.disable();

@@ -2,6 +2,7 @@
 
 namespace IdealPostcodes {
 	const cacheArguments = [
+		"id",
 		"query",
 		"limit",
 		"page",

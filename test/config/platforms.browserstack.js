@@ -84,7 +84,8 @@ module.exports = {
 	},
 
 	// Windows.IE
-
+	// Needs to run in LIVE mode only because JSONP not stubbed
+	// by test runner
 	// "InternetExplorer_9": {
 	// 	base: "BrowserStack",
 	// 	browser: "IE",

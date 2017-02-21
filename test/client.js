@@ -2,53 +2,55 @@
 
 describe("Client", () => {
 	describe("Transport", () => {
-		describe("xhrRequest", () => {
-			it ("executes XHR request", done => {
-				IdealPostcodes.Transport.xhrRequest({
-					url: "http://api.ideal-postcodes.co.uk/"
-				}, (error, response, xhr) => {
-					if (error) return done(error);
-					expect(response.code).toEqual(2000);
-					done();
-				});
-			});
-			describe("Mocked requests", () => {
-				beforeEach(() => {
-					jasmine.Ajax.install();
-				});
-
-				afterEach(() => {
-					jasmine.Ajax.uninstall();
-				});
-
-				it ("appends queryString to url", () => {
+		if (!IdealPostcodes.Transport.isIE() || IdealPostcodes.Transport.isIE() > 9) {
+			describe("xhrRequest", () => {
+				it ("executes XHR request", done => {
 					IdealPostcodes.Transport.xhrRequest({
-						url: "http://api.ideal-postcodes.co.uk/",
-						queryString: {
-							foo: "bar"
-						}
-					}, () => {});	
-					const xhr = jasmine.Ajax.requests.mostRecent();
-					expect(xhr.url).toEqual("http://api.ideal-postcodes.co.uk/?foo=bar");
+						url: "http://api.ideal-postcodes.co.uk/"
+					}, (error, response, xhr) => {
+						if (error) return done(error);
+						expect(response.code).toEqual(2000);
+						done();
+					});
 				});
-				it ("attaches custom request headers", () => {
-					IdealPostcodes.Transport.xhrRequest({
-						url: "http://api.ideal-postcodes.co.uk/",
-						headers: {
-							foo: "bar"
-						}
-					}, () => {});	
-					const xhr = jasmine.Ajax.requests.mostRecent();
-					expect(xhr.requestHeaders.foo).toEqual("bar");
+				describe("Mocked requests", () => {
+					beforeEach(() => {
+						jasmine.Ajax.install();
+					});
+
+					afterEach(() => {
+						jasmine.Ajax.uninstall();
+					});
+
+					it ("appends queryString to url", () => {
+						IdealPostcodes.Transport.xhrRequest({
+							url: "http://api.ideal-postcodes.co.uk/",
+							queryString: {
+								foo: "bar"
+							}
+						}, () => {});	
+						const xhr = jasmine.Ajax.requests.mostRecent();
+						expect(xhr.url).toEqual("http://api.ideal-postcodes.co.uk/?foo=bar");
+					});
+					it ("attaches custom request headers", () => {
+						IdealPostcodes.Transport.xhrRequest({
+							url: "http://api.ideal-postcodes.co.uk/",
+							headers: {
+								foo: "bar"
+							}
+						}, () => {});	
+						const xhr = jasmine.Ajax.requests.mostRecent();
+						expect(xhr.requestHeaders.foo).toEqual("bar");
+					});
 				});
 			});
-		});
-		describe("getXhr", () => {
-			it ("returns XMLHttpRequest instance", () => {
-				const instance = IdealPostcodes.Transport.getXhr();
-				expect(instance.onreadystatechange).toBeDefined();
+			describe("getXhr", () => {
+				it ("returns XMLHttpRequest instance", () => {
+					const instance = IdealPostcodes.Transport.getXhr();
+					expect(instance.onreadystatechange).toBeDefined();
+				});
 			});
-		});
+		}
 	});
 
 	describe("generateQueryString", () => {

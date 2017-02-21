@@ -77,10 +77,8 @@ gulp.task("minified", () => {
 
 gulp.task("lint:default", () => {
 	return gulp.src(paths.tscripts.src)
-		.pipe(tslint())
-		.pipe(tslint.report("prose", {
-			emitError: true
-		}));
+		.pipe( tslint({ formatter: "prose" }) )
+		.pipe( tslint.report({ emitError: true }) );
 });
 
 gulp.task("unittests", done => {

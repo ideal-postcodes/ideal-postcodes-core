@@ -83,8 +83,7 @@ gulp.task("lint:default", () => {
 
 gulp.task("unittests", done => {
 	new Server({
-		configFile: `${__dirname}/test/config/karma.local.conf.js`,
-		singleRun: true
+		configFile: `${__dirname}/test/config/karma.local.conf.js`
 	}, code => {
 		if (code === 1) return done("Unit Test Failures");
 		done();

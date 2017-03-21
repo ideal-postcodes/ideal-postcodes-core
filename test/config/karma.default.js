@@ -20,5 +20,11 @@ module.exports = {
 	"files": files,
 	"colors": true,
 	"reporters": ["dots"],
-	"port": 9876
+	"port": 9876,
+	"colors": true,
+	"singleRun": true,
+	"browserConsoleLogOptions": {
+    level: "log",
+    terminal: true
+  }
 };

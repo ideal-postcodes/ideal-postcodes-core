@@ -17,6 +17,7 @@ if (process.env.BROWSERS) {
 
 module.exports = config => {
 	config.set(_.extend(defaults, {
-		browsers: browsers
+		browsers: browsers,
+		logLevel: config.LOG_INFO
 	}));
 };

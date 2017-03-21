@@ -44,6 +44,8 @@ describe("Address Resource", () => {
 			});
 			expectResponse(responses.autocomplete.noResults);
 		});
+		// 401 responses buggy in some versions of IE10
+		// http://stackoverflow.com/questions/16081267/xmlhttprequest-status-0-instead-of-401-in-ie-10
 		it ("returns error if invalid api key", done => {
 			const query = "10 downing";
 			client = new IdealPostcodes.Client({ api_key: "bogus" });

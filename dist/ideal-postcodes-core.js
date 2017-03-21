@@ -1,6 +1,6 @@
 /**
  * ideal-postcodes-core - Ideal Postcodes core frontend javascript library
- * @version v0.3.4
+ * @version v0.3.5
  * @link https://ideal-postcodes.co.uk/
  * @license MIT
  */
@@ -194,11 +194,32 @@ var IdealPostcodes;
                 return true;
             }
         };
-        Transport.isIE = function (navigator) {
-            var nav = navigator ? navigator : window.navigator;
+        Transport.legacyBrowser = function (w) {
+            var ieVersion = Transport.isIE(w);
+            var operaVersion = Transport.isOpera(w);
+            return !!(ieVersion && ieVersion <= 9) || !!(operaVersion && operaVersion <= 12);
+        };
+        Transport.isIE = function (w) {
+            var nav = w ? w.navigator : window.navigator;
             try {
                 var myNav = nav.userAgent.toLowerCase();
                 return (myNav.indexOf("msie") !== -1) ? parseInt(myNav.split("msie")[1]) : false;
+            }
+            catch (e) {
+                return false;
+            }
+        };
+        Transport.isOpera = function (w) {
+            var opera = w ? w.opera : window["opera"];
+            if (!opera)
+                return false;
+            if (Object.prototype.toString.call(opera) !== "[object Opera]")
+                return false;
+            try {
+                var version = parseInt(opera.version(), 10);
+                if (isNaN(version))
+                    return false;
+                return version;
             }
             catch (e) {
                 return false;
@@ -553,8 +574,8 @@ var IdealPostcodes;
                 data: options.data || null
             };
             IdealPostcodes.Utils.extend(strictOptions.headers, Transport.defaultHeaders);
-            // If IE9, fallback to jsonp
-            if (Transport.isIE() && Transport.isIE() < 10)
+            // If legacy (<IE9, <Opera12, fallback to jsonp)
+            if (Transport.legacyBrowser())
                 return Transport.jsonpRequest(strictOptions, callback);
             // Otherwise proceed with XMLHttpRequest
             return Transport.xhrRequest(strictOptions, callback);

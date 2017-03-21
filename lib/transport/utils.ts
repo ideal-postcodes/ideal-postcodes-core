@@ -14,11 +14,38 @@ namespace IdealPostcodes {
 			}
 		};
 
-		export const isIE = (navigator?: Navigator): number|boolean => {
-			const nav = navigator ? navigator : window.navigator;
+		export const legacyBrowser = (w?: Window): boolean => {
+			const ieVersion = isIE(w);
+			const operaVersion = isOpera(w);
+			return !!(ieVersion && ieVersion <= 9) || !!(operaVersion && operaVersion <= 12);
+		};
+
+		export const isIE = (w?: Window): number|boolean => {
+			const nav = w ? w.navigator : window.navigator;
 			try {
 				const myNav = nav.userAgent.toLowerCase();
 				return (myNav.indexOf("msie") !== -1) ? parseInt(myNav.split("msie")[1]) : false;
+			} catch (e) {
+				return false;
+			}
+		};
+
+		interface Opera {
+			version: () => string;
+		}
+
+		interface OperaWindow extends Window {
+			opera?: Opera;
+		}
+
+		export const isOpera = (w?: OperaWindow): number|boolean => {
+			const opera = w ? w.opera : window["opera"];
+			if (!opera) return false;
+			if (Object.prototype.toString.call(opera) !== "[object Opera]") return false;
+			try {
+				const version = parseInt(opera.version(), 10);
+				if (isNaN(version)) return false;
+				return version;
 			} catch (e) {
 				return false;
 			}

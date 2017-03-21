@@ -8,6 +8,8 @@ const constructQueryString = Transport.constructQueryString;
 const constructAutocompleteQueryString = Transport.constructAutocompleteQueryString;
 const constructAddressQueryString = Transport.constructAddressQueryString;
 const isIE = Transport.isIE;
+const isOpera = Transport.isOpera;
+const legacyBrowser = Transport.legacyBrowser;
 
 describe("XhrUtils", () => {
 	describe(".constructHeaders", () => {
@@ -25,16 +27,97 @@ describe("XhrUtils", () => {
 
 	describe(".isIE", () => {
 		it ("returns IE version", () => {
-			expect(isIE({userAgent: `Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; 
+			const userAgent = `Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; 
 				Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; 
-				.NET CLR 3.0.30729; .NET4.0C; .NET4.0E)`})).toEqual(9);
+				.NET CLR 3.0.30729; .NET4.0C; .NET4.0E)`;
+			expect(isIE({navigator: {userAgent: userAgent}})).toEqual(9);
 		});
 		it ("returns false if not IE", () => {
-			expect(isIE({userAgent: `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) 
+			const userAgent = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) 
 				AppleWebKit/537.36 (KHTML, like Gecko) 
-				Chrome/52.0.2743.116 Safari/537.36`})).toEqual(false);
+				Chrome/52.0.2743.116 Safari/537.36`;
+			expect(isIE({navigator: {userAgent: userAgent}})).toEqual(false);
 		});
-	})
+	});
+
+	describe(".isOpera", () => {
+		describe("is opera", () => {
+			let originalToString;
+				beforeEach(() => {
+					originalToString = Object.prototype.toString;
+					Object.prototype.toString = () => "[object Opera]";
+				});
+				afterEach(() => {
+					Object.prototype.toString = originalToString;
+					originalToString = undefined;
+					expect(Object.prototype.toString.call({})).toEqual("[object Object]");
+				});
+			it ("returns Opera main version", () => {
+				const win = { opera: { version: () => "12.16" } };
+				expect(isOpera(win)).toEqual(12);
+			});
+			it ("returns false if opera object does not have version", () => {
+				const win = { opera: { version: "foo" } };
+				expect(isOpera(win)).toEqual(false);
+			});
+			it ("returns false if opera does not have version method", () => {
+				const win = { opera: {} };
+				expect(isOpera(win)).toEqual(false);
+			});
+		});
+		it ("returns false if not Opera", () => {
+			expect(isOpera({})).toEqual(false);
+		});
+	});
+
+	describe(".legacyBrowser", () => {
+		describe("is opera", () => {
+			let originalToString;
+			beforeEach(() => {
+				originalToString = Object.prototype.toString;
+				Object.prototype.toString = () => "[object Opera]";
+			});
+			afterEach(() => {
+				Object.prototype.toString = originalToString;
+				originalToString = undefined;
+				expect(Object.prototype.toString.call({})).toEqual("[object Object]");
+			});
+
+			it ("returns true if opera <= 12", () => {
+				const win = { opera: { version: () => "12.16" } };
+				expect(legacyBrowser(win)).toEqual(true);
+			});
+			it ("returns false if opera > 12", () => {
+				const win = { opera: { version: () => "13.16" } };
+				expect(legacyBrowser(win)).toEqual(false);
+			});
+		});
+		it ("returns false if opera has no version", () => {
+			const win = { version: "foo" };
+			expect(legacyBrowser(win)).toEqual(false);
+		});
+		it ("returns true if IE <= 9", () => {
+			const userAgent = `Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; 
+				Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; 
+				.NET CLR 3.0.30729; .NET4.0C; .NET4.0E)`;
+			expect(legacyBrowser({navigator: {userAgent: userAgent}})).toEqual(true);
+		});
+		it ("returns false if IE > 9", () => {
+			const userAgent = `Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; 
+				Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; 
+				.NET CLR 3.0.30729; .NET4.0C; .NET4.0E)`;
+			expect(legacyBrowser({navigator: {userAgent: userAgent}})).toEqual(false);
+		});
+		it ("returns false if chrome", () => {
+			const userAgent = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) 
+				AppleWebKit/537.36 (KHTML, like Gecko) 
+				Chrome/52.0.2743.116 Safari/537.36`;
+			expect(legacyBrowser({navigator: {userAgent: userAgent}})).toEqual(false);
+		})
+		it ("returns false otherwise", () => {
+			expect(legacyBrowser({})).toEqual(false);
+		});
+	});
 
 	describe(".constructAuthenticationHeader", () => {
 		it ("returns authorization header string", () => {

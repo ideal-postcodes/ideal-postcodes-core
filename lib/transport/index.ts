@@ -20,8 +20,8 @@ namespace IdealPostcodes {
 			};
 			IdealPostcodes.Utils.extend(strictOptions.headers, defaultHeaders);
 
-			// If IE9, fallback to jsonp
-			if (isIE() && isIE() < 10) return jsonpRequest(strictOptions, callback);
+			// If legacy (<IE9, <Opera12, fallback to jsonp)
+			if (legacyBrowser()) return jsonpRequest(strictOptions, callback);
 			// Otherwise proceed with XMLHttpRequest
 			return xhrRequest(strictOptions, callback);
 		};

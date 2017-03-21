@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.3.5] - 2017-03-20
+- Add Opera 12.16 and below to legacy browser support
+
 ## [0.3.4] - 2017-02-15
 - Fix client side caching
 

@@ -18,7 +18,7 @@ namespace IdealPostcodes {
 				super({
 					message: "Unable to parse JSON response"
 				});
-			};
+			}
 		}
 	}
 }

@@ -15,7 +15,7 @@ namespace IdealPostcodes {
 					result = func.apply(context, args);
 					if (!timeout) context = args = null;
 				}
-			};
+			}
 
 			return function() {
 				context = this;

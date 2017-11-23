@@ -91,6 +91,42 @@ namespace IdealPostcodes {
 		udprnStore: Object;
 		umprnStore: Object;
 	}
+
+	// Removes IdealPostcodes reference from window
+	export const removeGlobalReference = (): void => {
+		if (root && root["IdealPostcodes"]) {
+			root["IdealPostcodes"] = undefined;
+		}
+	};
 }
 
-window["IdealPostcodes"] = IdealPostcodes;
+declare var module: any;
+declare var define: any;
+declare var exports: any;
+declare var global: any;
+
+/** Module exporting with thanks to github.com/lodash/lodash */
+/** Detect free variable `global` from Node.js. */
+const freeGlobal = typeof global === "object" && global && global.Object === Object && global;
+
+/** Used as a reference to the global object. */
+const root = freeGlobal || Function("return this")();
+
+/** Detect free variable `exports`. */
+const freeExports = typeof exports === "object" && exports && !exports.nodeType && exports;
+
+/** Detect free variable `module`. */
+const freeModule = freeExports && typeof module === "object" && module && !module.nodeType && module;
+
+// Export for AMD
+if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
+	define(() => IdealPostcodes);
+} else if (freeModule) {
+	// Export for Node.js although this won't work without updating lib/transport
+	freeModule.exports = IdealPostcodes;
+	// Export for CommonJS support
+	freeExports.IdealPostcodes = IdealPostcodes;
+}
+
+// Export to the global object
+root.IdealPostcodes = IdealPostcodes;

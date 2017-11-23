@@ -1,6 +1,6 @@
 /**
  * ideal-postcodes-core - Ideal Postcodes core frontend javascript library
- * @version v0.3.5
+ * @version v1.0.0
  * @link https://ideal-postcodes.co.uk/
  * @license MIT
  */
@@ -22,9 +22,34 @@ var IdealPostcodes;
      * OPTIONS request
      */
     IdealPostcodes.STRICT_AUTHORISATION = false;
-    ;
+    // Removes IdealPostcodes reference from window
+    IdealPostcodes.removeGlobalReference = function () {
+        if (root && root["IdealPostcodes"]) {
+            root["IdealPostcodes"] = undefined;
+        }
+    };
 })(IdealPostcodes || (IdealPostcodes = {}));
-window["IdealPostcodes"] = IdealPostcodes;
+/** Module exporting with thanks to github.com/lodash/lodash */
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global === "object" && global && global.Object === Object && global;
+/** Used as a reference to the global object. */
+var root = freeGlobal || Function("return this")();
+/** Detect free variable `exports`. */
+var freeExports = typeof exports === "object" && exports && !exports.nodeType && exports;
+/** Detect free variable `module`. */
+var freeModule = freeExports && typeof module === "object" && module && !module.nodeType && module;
+// Export for AMD
+if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
+    define(function () { return IdealPostcodes; });
+}
+else if (freeModule) {
+    // Export for Node.js although this won't work without updating lib/transport
+    freeModule.exports = IdealPostcodes;
+    // Export for CommonJS support
+    freeExports.IdealPostcodes = IdealPostcodes;
+}
+// Export to the global object
+root.IdealPostcodes = IdealPostcodes;
 var IdealPostcodes;
 (function (IdealPostcodes) {
     var Utils;
@@ -46,7 +71,6 @@ var IdealPostcodes;
                         context = args = null;
                 }
             }
-            ;
             return function () {
                 context = this;
                 args = arguments;
@@ -326,7 +350,6 @@ var IdealPostcodes;
                     message: "Unable to parse JSON response"
                 }) || this;
             }
-            ;
             return JsonParseError;
         }(IdealPostcodesError));
         Errors.JsonParseError = JsonParseError;

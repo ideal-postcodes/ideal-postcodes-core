@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0] - 2017-11-23
+
+### Backwards Breaking Change
+- Now supports CommonJS and AMD imports. `ideal-postcodes-core` will be available globally as `IdealPostcodes` even if module system is detected. To remove this from the global object use `IdealPostcodes.removeGlobalReference`
+
 ## [0.3.5] - 2017-03-20
 - Add Opera 12.16 and below to legacy browser support
 
